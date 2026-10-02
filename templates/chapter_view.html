@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chapter {{ chapter_num }} - NoSQLVerse</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; background-color: #090d16; color: #f8fafc; padding: 40px 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: #111827; padding: 35px; border-radius: 12px; border: 1px solid #1f2937; }
+        h1 { color: #38bdf8; font-size: 22px; }
+        .quiz-box { background: #090d16; padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid #1f2937; }
+        button { background: #2563eb; color: white; padding: 12px 20px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 20px; }
+        button:hover { background: #1d4ed8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Course: {{ course.title }}</h1>
+        <h2>Chapter {{ chapter_num }}: {{ chapter.title }}</h2>
+        <p style="line-height: 1.7; color: #94a3b8; font-size: 15px;">{{ chapter.content }}</p>
+        
+        <hr style="border: 0; border-top: 1px solid #1f2937; margin: 25px 0;">
+        
+        <h3>Chapter Knowledge Check (10 MCQs)</h3>
+        {% if error %}<p style="color: #fca5a5; font-weight: bold;">{{ error }}</p>{% endif %}
+        
+        <form method="POST">
+            {% for q in chapter.quiz %}
+            {% set q_idx = loop.index0 %}
+            <div class="quiz-box">
+                <p style="font-weight: 600; color: #f1f5f9;">Q{{ loop.index }}: {{ q.question }}</p>
+                {% for opt in q.options %}
+                <label style="display: block; margin: 6px 0; color: #cbd5e1; cursor: pointer;">
+                    <input type="radio" name="q_{{ q_idx }}" value="{{ opt }}" required> {{ opt }}
+                </label>
+                {% endfor %}
+            </div>
+            {% endfor %}
+            <button type="submit">Submit Chapter Quiz & Proceed →</button>
+        </form>
+    </div>
+</body>
+</html>

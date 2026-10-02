@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assessment - NoSQLVerse</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #090d16; padding: 40px 20px; color: #f8fafc; }
+        .container { max-width: 600px; margin: 0 auto; background: #111827; padding: 35px; border-radius: 12px; border: 1px solid #1f2937; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+        h1 { font-size: 22px; margin-bottom: 15px; color: #f8fafc; }
+        .option { margin-bottom: 12px; font-size: 15px; background: #090d16; padding: 12px 15px; border-radius: 8px; border: 1px solid #1f2937; transition: border-color 0.3s; }
+        .option:hover { border-color: #38bdf8; }
+        label { display: flex; align-items: center; gap: 10px; cursor: pointer; color: #cbd5e1; }
+        input[type="radio"] { accent-color: #2563eb; width: 16px; height: 16px; }
+        button { background: linear-gradient(135deg, #059669, #10b981); color: white; border: none; padding: 12px 24px; font-weight: 700; border-radius: 8px; cursor: pointer; margin-top: 20px; transition: all 0.3s; }
+        button:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Final Certification Exam</h1>
+        <p style="color: #94a3b8; font-size: 14px; margin-bottom: 25px;">Course: <strong style="color: #38bdf8;">{{ course.title }}</strong></p>
+        
+        {% if error %}<div style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #fca5a5; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; font-weight: 600;">{{ error }}</div>{% endif %}
+        
+        <form method="POST">
+            <p style="font-weight: 700; font-size: 16px; margin-bottom: 20px; color: #f1f5f9;">Q: {{ course.assessment.question }}</p>
+            {% for opt in course.assessment.options %}
+            <div class="option">
+                <label><input type="radio" name="answer" value="{{ opt }}" required> {{ opt }}</label>
+            </div>
+            {% endfor %}
+            <button type="submit">Submit Assessment Exam</button>
+        </form>
+    </div>
+</body>
+</html>

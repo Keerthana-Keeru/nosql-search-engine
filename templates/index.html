@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Learning Hub - NoSQL Portal</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px 30px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        h1 { font-size: 22px; color: #0f172a; }
+        .user-info { font-size: 14px; color: #64748b; display: flex; gap: 15px; align-items: center; }
+        .badge { background: #ecfdf5; color: #059669; padding: 4px 10px; border-radius: 20px; font-weight: bold; border: 1px solid #a7f3d0; }
+        .logout-btn { background: #ef4444; color: white; padding: 6px 12px; border-radius: 5px; text-decoration: none; font-size: 13px; font-weight: bold; }
+        .logout-btn:hover { background: #dc2626; }
+        
+        section { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        h2 { font-size: 18px; margin-bottom: 15px; color: #0f172a; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
+        
+        /* Chapters Grid */
+        .chapter-card { border: 1px solid #e2e8f0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fafafa; }
+        .chapter-title { font-weight: bold; font-size: 16px; color: #2563eb; margin-bottom: 6px; }
+        .chapter-content { font-size: 14px; color: #475569; line-height: 1.5; margin-bottom: 10px; }
+        
+        /* Search Box */
+        .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
+        input[type="text"] { flex: 1; padding: 10px 14px; font-size: 14px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; }
+        input[type="text"]:focus { border-color: #2563eb; }
+        button { padding: 10px 20px; font-size: 14px; font-weight: bold; background-color: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; }
+        button:hover { background-color: #1d4ed8; }
+        
+        .result-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 15px; margin-bottom: 12px; }
+        .result-title { font-size: 16px; font-weight: 600; color: #0f172a; margin-bottom: 4px; }
+        .result-text { font-size: 14px; color: #334155; line-height: 1.5; margin-bottom: 8px; }
+        .result-footer { font-size: 12px; color: #94a3b8; display: flex; justify-content: space-between; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>NoSQL Learning Hub</h1>
+            <div class="user-info">
+                <span>Welcome, <strong>{{ session.name }}</strong></span>
+                <span class="badge">Points: {{ user.points }}</span>
+                <a href="/logout" class="logout-btn">Logout</a>
+            </div>
+        </header>
+
+        <!-- Chapters Section -->
+        <section>
+            <h2>Published Course Chapters</h2>
+            {% if chapters %}
+                {% for chapter in chapters %}
+                <div class="chapter-card">
+                    <div class="chapter-title">{{ loop.index }}. {{ chapter.title }}</div>
+                    <div class="chapter-content">{{ chapter.content }}</div>
+                    <span style="font-size: 12px; color: #059669; font-weight: bold;">Reward: +{{ chapter.points }} Points</span>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="color: #64748b; font-size: 14px;">No chapters published by the admin yet. Check back soon!</p>
+            {% endif %}
+        </section>
+
+        <!-- Intelligent Search Engine Section -->
+        <section>
+            <h2>Intelligent Document Search (TF-IDF Powered)</h2>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search NoSQL topics, documents, or concepts..." onkeypress="handleKeyPress(event)">
+                <button onclick="performSearch()">Search</button>
+            </div>
+            <div id="statusMsg" style="font-size: 13px; color: #64748b; margin-bottom: 10px;"></div>
+            <div id="results"></div>
+        </section>
+    </div>
+
+    <script>
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') performSearch();
+        }
+
+        async function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            const resultsDiv = document.getElementById('results');
+            const statusMsg = document.getElementById('statusMsg');
+
+            if (!query) {
+                statusMsg.textContent = "Please enter a search query.";
+                resultsDiv.innerHTML = "";
+                return;
+            }
+
+            statusMsg.textContent = "Computing vector cosine similarity...";
+            resultsDiv.innerHTML = "";
+
+            try {
+                const response = await fetch(`/search?q=${encodeURIComponent(query)}`);
+                const data = await response.json();
+
+                if (data.length === 0) {
+                    statusMsg.textContent = "No documents matched your query vector.";
+                    return;
+                }
+
+                statusMsg.textContent = `Found ${data.length} relevant document(s):`;
+
+                data.forEach((doc, index) => {
+                    const card = document.createElement('div');
+                    card.className = "result-card";
+                    card.innerHTML = `
+                        <div class="result-title">${index + 1}. ${escapeHtml(doc.title)}</div>
+                        <div class="result-text">${escapeHtml(doc.content)}</div>
+                        <div class="result-footer">
+                            <span>Category: ${escapeHtml(doc.category)}</span>
+                            <span style="color: #059669; font-weight: bold;">Relevance Score: ${doc.score}</span>
+                        </div>
+                    `;
+                    resultsDiv.appendChild(card);
+                });
+            } catch (err) {
+                statusMsg.textContent = "Error executing search request.";
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return "";
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+    </script>
+</body>
+</html>

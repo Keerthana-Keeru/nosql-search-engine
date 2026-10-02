@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - NoSQLVerse</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #090d16; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .card { background: #111827; padding: 35px; border-radius: 12px; border: 1px solid #1f2937; box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 100%; max-width: 420px; position: relative; overflow: hidden; }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, #10b981, #38bdf8); }
+        h2 { margin-bottom: 25px; color: #f8fafc; text-align: center; font-size: 24px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #94a3b8; }
+        input { width: 100%; padding: 12px; font-size: 14px; background: #090d16; border: 1px solid #334155; border-radius: 8px; color: white; box-sizing: border-box; outline: none; transition: border-color 0.3s; }
+        input:focus { border-color: #38bdf8; box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
+        button { width: 100%; padding: 12px; background: linear-gradient(135deg, #059669, #10b981); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 15px; transition: all 0.3s; }
+        button:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        .link { text-align: center; margin-top: 20px; font-size: 14px; color: #94a3b8; }
+        .link a { color: #38bdf8; text-decoration: none; font-weight: 600; }
+        .link a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Join NoSQLVerse</h2>
+        <form method="POST">
+            <div class="form-group"><label>Full Name</label><input type="text" name="name" required placeholder="Keerthana S"></div>
+            <div class="form-group"><label>Email Address</label><input type="email" name="email" required placeholder="name@example.com"></div>
+            <div class="form-group"><label>Password</label><input type="password" name="password" required placeholder="••••••••"></div>
+            <div class="form-group"><label>Age</label><input type="number" name="age" required placeholder="21"></div>
+            <div class="form-group"><label>College Name</label><input type="text" name="college" required placeholder="Engineering College"></div>
+            <div class="form-group"><label>Course / Program</label><input type="text" name="course" required placeholder="Information Science"></div>
+            <button type="submit">Create Account</button>
+        </form>
+        <div class="link">Already have an account? <a href="/login">Login here</a></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Final Certification Exam - NoSQLVerse</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; background-color: #090d16; color: #f8fafc; padding: 40px 20px; }
+        .container { max-width: 850px; margin: 0 auto; background: #111827; padding: 35px; border-radius: 12px; border: 1px solid #1f2937; }
+        h1 { color: #38bdf8; }
+        .quiz-box { background: #090d16; padding: 18px; border-radius: 8px; margin-top: 20px; border: 1px solid #1f2937; }
+        label { display: block; margin: 8px 0; color: #cbd5e1; cursor: pointer; font-size: 14px; }
+        input[type="radio"] { margin-right: 10px; accent-color: #10b981; }
+        button { background: linear-gradient(135deg, #059669, #10b981); color: white; padding: 14px 24px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 30px; width: 100%; font-size: 16px; transition: all 0.3s; }
+        button:hover { opacity: 0.9; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+        .error-banner { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #fca5a5; padding: 15px; border-radius: 8px; margin-top: 20px; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Final Certification Exam: {{ course.title }}</h1>
+        <p style="color: #94a3b8; line-height: 1.6;">You have completed all 10 chapters! Pass this 20-question comprehensive exam with a score of at least <strong>75%</strong> to officially earn your course certificate and unlock 250 points.</p>
+        
+        {% if error %}
+        <div class="error-banner">{{ error }}</div>
+        {% endif %}
+        
+        <form method="POST">
+            {% for q in final_exam %}
+            {% set q_idx = loop.index0 %}
+            <div class="quiz-box">
+                <p style="font-weight: 600; color: #38bdf8; margin-top: 0;">Final Q{{ loop.index }}: {{ q.question }}</p>
+                {% for opt in q.options %}
+                <label>
+                    <input type="radio" name="final_q_{{ q_idx }}" value="{{ opt }}" required> {{ opt }}
+                </label>
+                {% endfor %}
+            </div>
+            {% endfor %}
+            <button type="submit">Submit Final Exam & Unlock Certificate 🎓</button>
+        </form>
+    </div>
+</body>
+</html>

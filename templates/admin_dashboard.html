@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - NoSQLVerse</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #090d16; color: #f8fafc; margin: 0; padding: 30px; }
+        .container { max-width: 1050px; margin: 0 auto; background: #111827; padding: 35px; border-radius: 12px; border: 1px solid #1f2937; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+        h1, h2, h3, h4 { color: #f8fafc; }
+        .header-flex { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1f2937; padding-bottom: 20px; margin-bottom: 30px; }
+        .logout-btn { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #fca5a5; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px; transition: all 0.3s; }
+        .logout-btn:hover { background: #ef4444; color: white; }
+        section { margin-bottom: 40px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #1f2937; padding: 12px; text-align: left; font-size: 13px; color: #cbd5e1; }
+        th { background-color: #090d16; color: #38bdf8; font-weight: 700; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-weight: 600; font-size: 13px; margin-bottom: 5px; color: #94a3b8; }
+        input, textarea, select { width: 100%; padding: 10px; background: #090d16; border: 1px solid #334155; border-radius: 8px; box-sizing: border-box; font-size: 14px; color: white; outline: none; }
+        input:focus, textarea:focus, select:focus { border-color: #38bdf8; box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
+        button { background: #2563eb; color: white; border: none; padding: 14px 24px; font-weight: 700; border-radius: 8px; cursor: pointer; transition: all 0.3s; width: 100%; font-size: 16px; margin-top: 25px; }
+        button:hover { background: #1d4ed8; box-shadow: 0 0 15px rgba(37, 99, 235, 0.4); }
+        .chapter-box { background: #090d16; padding: 20px; border: 1px solid #1f2937; border-radius: 8px; margin-bottom: 25px; }
+        .quiz-subbox { background: #111827; padding: 15px; border: 1px solid #334155; border-radius: 6px; margin-top: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-flex">
+            <h1>⚡ Admin Control Panel & Course Manager</h1>
+            <a href="/logout" class="logout-btn">Logout</a>
+        </div>
+
+        <section>
+            <h2>📊 Course-wise Student Enrollment & Progress Tracking</h2>
+            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">Detailed breakdown of student progression, active chapter completion percentages, and certification status.</p>
+            
+            {% for course in courses %}
+            <div style="background: #090d16; border: 1px solid #1f2937; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3 style="color: #38bdf8; margin-top: 0;">📚 Course: {{ course.title }}</h3>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Email</th>
+                            <th>College</th>
+                            <th>Chapters Completed</th>
+                            <th>Progress %</th>
+                            <th>Status / Certification</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set course_id_str = course._id|string %}
+                        {% set ns = namespace(enrolled_count=0) %}
+                        
+                        {% for u in users if u.role == 'student' %}
+                            {% set enrolled_courses = u.get('enrolled_courses', []) %}
+                            {% if course_id_str in enrolled_courses %}
+                                {% set ns.enrolled_count = ns.enrolled_count + 1 %}
+                                {% set completed_chaps_dict = u.get('completed_chapters', {}) %}
+                                {% set course_chaps = completed_chaps_dict.get(course_id_str, []) if completed_chaps_dict is mapping else [] %}
+                                {% set chap_count = course_chaps|length %}
+                                {% set progress_pct = (chap_count * 10) %}
+                                {% set completed_courses = u.get('completed_courses', []) %}
+                                
+                                <tr>
+                                    <td>{{ u.name }}</td>
+                                    <td>{{ u.email }}</td>
+                                    <td>{{ u.college }}</td>
+                                    <td><strong style="color: #facc15;">{{ chap_count }} / 10</strong></td>
+                                    <td>
+                                        <div style="background: #1f2937; border-radius: 4px; overflow: hidden; width: 100px; height: 10px; display: inline-block; vertical-align: middle; margin-right: 8px;">
+                                            <div style="background: {% if course_id_str in completed_courses %}#10b981{% else %}#38bdf8{% endif %}; width: {{ progress_pct }}%; height: 100%;"></div>
+                                        </div>
+                                        {{ progress_pct }}%
+                                    </td>
+                                    <td>
+                                        {% if course_id_str in completed_courses %}
+                                            <span style="color: #34d399; font-weight: bold;">Completed & Certified 🎓</span>
+                                        {% elif chap_count > 0 %}
+                                            <span style="color: #38bdf8; font-weight: bold;">In Progress ({{ progress_pct }}%)</span>
+                                        {% else %}
+                                            <span style="color: #94a3b8;">Enrolled (0% Pending)</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if ns.enrolled_count == 0 %}
+                            <tr><td colspan="6" style="text-align: center; color: #94a3b8; padding: 15px;">No students enrolled in this course yet.</td></tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            {% endfor %}
+        </section>
+
+        <section>
+            <h2>💬 Student Feedback History Log</h2>
+            <table>
+                <thead><tr><th>Student Name</th><th>Course Title</th><th>Rating</th><th>Feedback Message</th><th>Timestamp</th></tr></thead>
+                <tbody>
+                    {% for f in feedback %}
+                    <tr><td>{{ f.user_name }}</td><td>{{ f.course_title }}</td><td><strong style="color: #facc15;">{{ f.rating }} / 5</strong></td><td>{{ f.feedback }}</td><td>{{ f.timestamp }}</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>✨ Publish Complete Course (10 Chapters + 10 MCQs each + 20 Final MCQs)</h2>
+            <form method="POST" action="/add_course">
+                <div class="form-group"><label>Course Title</label><input type="text" name="title" required placeholder="e.g., MongoDB Document Architecture & Operations"></div>
+                <div class="form-group"><label>Course Description</label><textarea name="description" rows="2" required placeholder="Comprehensive course overview..."></textarea></div>
+                
+                <h3 style="color: #38bdf8; margin: 30px 0 15px 0;">📚 10 Course Chapters & Their 10 Chapter MCQs</h3>
+                
+                {% for i in range(1, 11) %}
+                <div class="chapter-box">
+                    <h3 style="color: #34d399; margin-top: 0;">Chapter {{ i }} Details</h3>
+                    <div class="form-group"><label>Chapter {{ i }} Title</label><input type="text" name="chapter_titles[]" required placeholder="Title for Chapter {{ i }}"></div>
+                    <div class="form-group"><label>Chapter {{ i }} Content Text</label><textarea name="chapter_contents[]" rows="3" required placeholder="Detailed lesson text for Chapter {{ i }}..."></textarea></div>
+                    
+                    <h4 style="color: #38bdf8; margin-top: 15px;">Chapter {{ i }} Quizzes (10 MCQs)</h4>
+                    {% for q in range(1, 11) %}
+                    <div class="quiz-subbox">
+                        <label style="color: #f1f5f9; font-weight: bold;">Question {{ q }}</label>
+                        <div class="form-group"><input type="text" name="ch_{{ i }}_q_{{ q }}" required placeholder="Enter MCQ question {{ q }}"></div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div class="form-group"><input type="text" name="ch_{{ i }}_q_{{ q }}_opt1" required placeholder="Option A"></div>
+                            <div class="form-group"><input type="text" name="ch_{{ i }}_q_{{ q }}_opt2" required placeholder="Option B"></div>
+                            <div class="form-group"><input type="text" name="ch_{{ i }}_q_{{ q }}_opt3" required placeholder="Option C"></div>
+                            <div class="form-group"><input type="text" name="ch_{{ i }}_q_{{ q }}_opt4" required placeholder="Option D"></div>
+                        </div>
+                        <div class="form-group"><input type="text" name="ch_{{ i }}_q_{{ q }}_ans" required placeholder="Correct Answer (Must match exact option text)"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+
+                <h3 style="color: #38bdf8; margin: 30px 0 15px 0;">🎓 Final Comprehensive Assessment (20 MCQs for Certification)</h3>
+                {% for j in range(1, 21) %}
+                <div class="chapter-box">
+                    <h4 style="color: #facc15; margin-top: 0;">Final Exam Question {{ j }}</h4>
+                    <div class="form-group"><input type="text" name="final_q_{{ j }}" required placeholder="Comprehensive final question {{ j }}"></div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="form-group"><input type="text" name="final_q_{{ j }}_opt1" required placeholder="Option A"></div>
+                        <div class="form-group"><input type="text" name="final_q_{{ j }}_opt2" required placeholder="Option B"></div>
+                        <div class="form-group"><input type="text" name="final_q_{{ j }}_opt3" required placeholder="Option C"></div>
+                        <div class="form-group"><input type="text" name="final_q_{{ j }}_opt4" required placeholder="Option D"></div>
+                    </div>
+                    <div class="form-group"><input type="text" name="final_q_{{ j }}_ans" required placeholder="Correct Answer (Exact match)"></div>
+                </div>
+                {% endfor %}
+
+                <button type="submit">Publish Complete Course to Database 🚀</button>
+            </form>
+        </section>
+    </div>
+</body>
+</html>

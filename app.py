@@ -20,7 +20,7 @@ users_collection = db['users']
 courses_collection = db['courses']
 feedback_collection = db['feedback']
 documents_collection = db['documents']
-
+enrollments_collection = db['enrollments']
 
 @app.route('/')
 def landing():
@@ -181,15 +181,40 @@ def enroll(course_id):
     if 'user_id' not in session or session.get('role') != 'student':
         return redirect(url_for('login'))
 
-    user = users_collection.find_one({"_id": ObjectId(session['user_id'])})
-    enrolled = user.get('enrolled_courses', [])
-    completed = user.get('completed_courses', [])
+    user_id = session['user_id']
+    course_id_str = str(course_id).strip()
 
-    if course_id not in enrolled and course_id not in completed:
-        users_collection.update_one(
-            {"_id": ObjectId(session['user_id'])},
-            {"$addToSet": {"enrolled_courses": course_id}}
-        )
+    # Fetch user and course to store descriptive audit data
+    user = users_collection.find_one({"_id": ObjectId(user_id)})
+    course = courses_collection.find_one({"_id": ObjectId(course_id_str)})
+
+    if not course or not user:
+        return redirect(url_for('student_dashboard'))
+
+    # 1. Update the user document for dashboard tracking
+    users_collection.update_one(
+        {"_id": ObjectId(user_id)},
+        {"$addToSet": {"enrolled_courses": course_id_str}}
+    )
+
+    # 2. Insert into the standalone 'enrollments' collection
+    existing_enrollment = enrollments_collection.find_one({
+        "user_id": ObjectId(user_id),
+        "course_id": ObjectId(course_id_str)
+    })
+
+    if not existing_enrollment:
+        enrollment_record = {
+            "user_id": ObjectId(user_id),
+            "student_name": user.get('name', ''),
+            "student_email": user.get('email', ''),
+            "course_id": ObjectId(course_id_str),
+            "course_title": course.get('title', ''),
+            "enrolled_at": datetime.datetime.now(),
+            "status": "active"
+        }
+        enrollments_collection.insert_one(enrollment_record)
+        print(f"✓ Created new enrollment record in enrollments collection for {user.get('name')}")
 
     return redirect(url_for('student_dashboard'))
 

@@ -2,41 +2,346 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Chapter {{ chapter_num }} - NoSQLVerse</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ chapter.chapter_title or 'Chapter ' ~ chapter_num }} - NoSQLVerse</title>
     <style>
-        body { font-family: -apple-system, sans-serif; background-color: #090d16; color: #f8fafc; padding: 40px 20px; }
-        .container { max-width: 800px; margin: 0 auto; background: #111827; padding: 35px; border-radius: 12px; border: 1px solid #1f2937; }
-        h1 { color: #38bdf8; font-size: 22px; }
-        .quiz-box { background: #090d16; padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid #1f2937; }
-        button { background: #2563eb; color: white; padding: 12px 20px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 20px; }
-        button:hover { background: #1d4ed8; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #090d16;
+            color: #f8fafc;
+            margin: 0;
+            padding: 30px 16px;
+        }
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+        }
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .btn-nav-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 6px;
+            background: #111827;
+            border: 1px solid #1f2937;
+            transition: all 0.2s ease;
+        }
+        .btn-nav-home:hover {
+            color: #38bdf8;
+            border-color: #38bdf8;
+            background: #0f172a;
+        }
+        .card {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+            margin-bottom: 25px;
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        h1 {
+            font-size: 24px;
+            margin: 0 0 6px 0;
+            color: #f8fafc;
+        }
+        .course-title {
+            color: #94a3b8;
+            font-size: 14px;
+            margin: 0 0 24px 0;
+            border-bottom: 1px solid #1f2937;
+            padding-bottom: 16px;
+        }
+        .section-block {
+            background: #0b1120;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 18px;
+            line-height: 1.7;
+            color: #cbd5e1;
+            font-size: 15px;
+        }
+        .section-block h3 {
+            color: #38bdf8;
+            margin-top: 0;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-block ul {
+            margin: 8px 0 0 0;
+            padding-left: 20px;
+        }
+        .section-block li {
+            margin-bottom: 6px;
+        }
+        .btn-start {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 15px;
+            padding: 13px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-start:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+        .success-banner {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid #10b981;
+            color: #6ee7b7;
+            padding: 18px 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+        .success-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+        .btn-home {
+            background: #1f2937;
+            color: #f8fafc;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: 1px solid #374151;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-home:hover {
+            background: #374151;
+            border-color: #4b5563;
+        }
+        .btn-next {
+            background: #0284c7;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 10px 20px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-next:hover {
+            background: #0369a1;
+        }
+        .error-banner {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .question-block {
+            margin-bottom: 22px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #1f2937;
+        }
+        .question-block:last-of-type {
+            border-bottom: none;
+        }
+        .question-title {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 12px;
+            color: #f1f5f9;
+        }
+        .option {
+            margin-bottom: 8px;
+            background: #090d16;
+            padding: 10px 14px;
+            border-radius: 6px;
+            border: 1px solid #1f2937;
+            transition: all 0.2s ease;
+        }
+        .option:hover {
+            border-color: #38bdf8;
+            background: #0d1526;
+        }
+        label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+        input[type="radio"] {
+            accent-color: #2563eb;
+            width: 16px;
+            height: 16px;
+        }
+        .btn-submit {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            border: none;
+            padding: 13px 24px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            width: 100%;
+            margin-top: 15px;
+            transition: all 0.2s ease;
+        }
+        .btn-submit:hover {
+            filter: brightness(1.1);
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Course: {{ course.title }}</h1>
-        <h2>Chapter {{ chapter_num }}: {{ chapter.title }}</h2>
-        <p style="line-height: 1.7; color: #94a3b8; font-size: 15px;">{{ chapter.content }}</p>
-        
-        <hr style="border: 0; border-top: 1px solid #1f2937; margin: 25px 0;">
-        
-        <h3>Chapter Knowledge Check (10 MCQs)</h3>
-        {% if error %}<p style="color: #fca5a5; font-weight: bold;">{{ error }}</p>{% endif %}
-        
-        <form method="POST">
-            {% for q in chapter.quiz %}
-            {% set q_idx = loop.index0 %}
-            <div class="quiz-box">
-                <p style="font-weight: 600; color: #f1f5f9;">Q{{ loop.index }}: {{ q.question }}</p>
-                {% for opt in q.options %}
-                <label style="display: block; margin: 6px 0; color: #cbd5e1; cursor: pointer;">
-                    <input type="radio" name="q_{{ q_idx }}" value="{{ opt }}" required> {{ opt }}
-                </label>
-                {% endfor %}
+
+        <!-- TOP NAVIGATION -->
+        <div class="top-nav">
+            <a href="{{ url_for('student_dashboard') }}" class="btn-nav-home">
+                &larr; Back to Dashboard
+            </a>
+            <span style="font-size: 13px; color: #64748b;">NoSQLVerse Learning Portal</span>
+        </div>
+
+        <!-- COMPLETION / PASS BANNER -->
+        {% if passed %}
+        <div class="card success-banner">
+            <h2 style="margin: 0 0 8px 0; font-size: 18px; color: #6ee7b7;">🎉 Chapter {{ chapter_num }} Completed!</h2>
+            <p style="margin: 0; font-size: 14px; color: #d1fae5;">
+                Congratulations! You scored {{ score }}/10 and passed the Knowledge Check.
+            </p>
+            <div class="success-actions">
+                <a href="{{ url_for('student_dashboard') }}" class="btn-home">
+                    🏠 Return to Dashboard
+                </a>
+                {% if chapter_num < 10 %}
+                <a href="{{ url_for('view_chapter', course_id=course._id, chapter_num=chapter_num+1) }}" class="btn-next">
+                    Continue to Chapter {{ chapter_num + 1 }} &rarr;
+                </a>
+                {% endif %}
             </div>
-            {% endfor %}
-            <button type="submit">Submit Chapter Quiz & Proceed →</button>
-        </form>
+        </div>
+        {% endif %}
+
+        <!-- LEARNING MATERIAL SECTION -->
+        <div class="card">
+            <span class="badge">Chapter {{ chapter_num }} of 10</span>
+            <h1>{{ chapter.chapter_title or 'Module Architecture & Implementation' }}</h1>
+            <p class="course-title">Course: <strong style="color: #38bdf8;">{{ course.title }}</strong></p>
+
+            <div class="section-block">
+                <h3>📌 Module Overview</h3>
+                <p>{{ chapter.content or 'This module introduces the key structural and theoretical mechanisms underpinning distributed storage systems.' }}</p>
+            </div>
+
+            <div class="section-block">
+                <h3>⚙️ Core Architecture & Principles</h3>
+                <ul>
+                    <li><strong>Data Structures & Formatting:</strong> Analyzes binary data serialization and low-latency traversal mechanics.</li>
+                    <li><strong>Storage Engine & Memory:</strong> Evaluates memory buffer caches, commit logs, and disk persistence strategies.</li>
+                    <li><strong>Partitioning & Distribution:</strong> Reviews horizontal hash-based distribution and replica set consensus mechanisms.</li>
+                </ul>
+            </div>
+
+            <div class="section-block">
+                <h3>🚀 Query Execution & Best Practices</h3>
+                <ul>
+                    <li>Align partition keys directly with query access patterns to avoid costly cluster table scans.</li>
+                    <li>Structure secondary indexes specifically around high-frequency read filters to minimize memory footprints.</li>
+                    <li>Tune read and write consistency levels based on availability and partition tolerance requirements.</li>
+                </ul>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 25px;">
+                <a href="{{ url_for('student_dashboard') }}" class="btn-home">
+                    &larr; Back to Dashboard
+                </a>
+                <button type="button" class="btn-start" onclick="openQuiz()">
+                    Start Chapter Knowledge Check &rarr;
+                </button>
+            </div>
+        </div>
+
+        <!-- QUIZ SECTION -->
+        <div class="card" id="quiz-container" style="display: {% if error %}block{% else %}none{% endif %};">
+            <h2 style="font-size: 20px; margin-top: 0; color: #f1f5f9; margin-bottom: 6px;">
+                Chapter {{ chapter_num }} Knowledge Check
+            </h2>
+            <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">
+                Score at least 7/10 to unlock Chapter {{ chapter_num + 1 if chapter_num < 10 else 'Final Exam' }}.
+            </p>
+
+            {% if error %}
+                <div class="error-banner">{{ error }}</div>
+            {% endif %}
+
+            <form method="POST">
+                {% for q in chapter.quiz %}
+                {% set q_idx = loop.index0 %}
+                <div class="question-block">
+                    <p class="question-title">{{ loop.index }}. {{ q.question }}</p>
+                    {% for opt in q.options %}
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q_{{ q_idx }}" value="{{ opt }}" required>
+                            {{ opt }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+
+                <button type="submit" class="btn-submit">Submit Answers</button>
+            </form>
+        </div>
+
     </div>
+
+    <script>
+        function openQuiz() {
+            const quizBox = document.getElementById('quiz-container');
+            quizBox.style.display = 'block';
+            quizBox.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
 </body>
 </html>

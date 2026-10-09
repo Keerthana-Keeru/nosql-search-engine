@@ -1,0 +1,893 @@
+[
+  {
+    "title_keyword": "MongoDB Essentials",
+    "course_title": "MongoDB Essentials & Document Design",
+    "description": "Master document-oriented database architecture, BSON structures, and aggregation pipelines.",
+    "duration": "4 Weeks",
+    "chapters": [
+      {
+        "chapter_number": 1,
+        "chapter_title": "Chapter 1: Document Model & BSON Architecture",
+        "content": "Introduction to document-oriented databases. Understanding binary JSON (BSON), supported primitive types, ObjectId internal timestamps, and comparing dynamic schema flexibility against relational tabular models.",
+        "quiz": [
+          {"question": "What binary serialization format does MongoDB use to store documents?", "options": ["JSON", "BSON", "Protocol Buffers", "CBOR"], "answer": "BSON"},
+          {"question": "How many bytes compose a standard MongoDB ObjectId?", "options": ["8 bytes", "12 bytes", "16 bytes", "32 bytes"], "answer": "12 bytes"},
+          {"question": "What information is embedded in the first 4 bytes of an ObjectId?", "options": ["Unix Epoch Timestamp", "Process ID", "Machine Hash", "Random Counter"], "answer": "Unix Epoch Timestamp"},
+          {"question": "What is the hard upper limit for a single BSON document size?", "options": ["4 MB", "8 MB", "16 MB", "32 MB"], "answer": "16 MB"},
+          {"question": "Which data type allows storing arbitrary binary assets beyond 16MB?", "options": ["GridFS", "BlobFS", "ChunkArray", "BinaryBucket"], "answer": "GridFS"},
+          {"question": "In MongoDB, what does a collection correspond to in relational SQL?", "options": ["Row", "Table", "Database", "View"], "answer": "Table"},
+          {"question": "What is a primary advantage of BSON over standard text JSON?", "options": ["Human readability", "Fast traversal and data type encoding", "Smaller file size on disk always", "Enforced normalization"], "answer": "Fast traversal and data type encoding"},
+          {"question": "Which BSON data type handles precise monetary arithmetic without floating-point drift?", "options": ["Double", "Decimal128", "Int64", "NumberLong"], "answer": "Decimal128"},
+          {"question": "What field name is reserved as the primary key in every document?", "options": ["id", "_id", "doc_id", "pk"], "answer": "_id"},
+          {"question": "Can two documents in the same collection have entirely different attributes?", "options": ["Yes, schemas are dynamic", "No, schemas are static", "Only if typed as SQL", "Only with an admin permit"], "answer": "Yes, schemas are dynamic"}
+        ]
+      },
+      {
+        "chapter_number": 2,
+        "chapter_title": "Chapter 2: CRUD Operations & Query Selectors",
+        "content": "Mastering basic and filtered CRUD operations. Utilizing comparison ($gt, $lt, $in) and logical ($and, $or, $nor) query operators, projection parameters, and cursor pagination mechanics.",
+        "quiz": [
+          {"question": "Which method fetches a single document matching a query filter?", "options": ["db.coll.fetchOne()", "db.coll.findOne()", "db.coll.get()", "db.coll.select()"], "answer": "db.coll.findOne()"},
+          {"question": "Which query operator tests if an attribute matches any value in a specified array?", "options": ["$exists", "$in", "$contains", "$eq"], "answer": "$in"},
+          {"question": "How do you project only 'title' while suppressing the default '_id' field?", "options": ["{title: 1, _id: 0}", "{title: true, _id: true}", "{include: ['title']}", "{show: 'title'}"], "answer": "{title: 1, _id: 0}"},
+          {"question": "Which operator performs a logical negation on a query condition?", "options": ["$not", "$nor", "$neq", "$invert"], "answer": "$not"},
+          {"question": "What cursor method limits the total number of documents returned?", "options": ["cap()", "limit()", "slice()", "take()"], "answer": "limit()"},
+          {"question": "How do you skip the first 20 records for cursor pagination?", "options": ["skip(20)", "offset(20)", "jump(20)", "slice(20)"], "answer": "skip(20)"},
+          {"question": "What operator checks for the presence or absence of a specific field?", "options": ["$has", "$present", "$exists", "$type"], "answer": "$exists"},
+          {"question": "Which comparison operator checks if a numerical field is greater than or equal to 50?", "options": ["$gte: 50", "$gt: 50", "$ge: 50", "$over: 50"], "answer": "$gte: 50"},
+          {"question": "What method inserts multiple documents in a single atomic network call?", "options": ["insertBulk()", "insertMany()", "addBatch()", "pushMany()"], "answer": "insertMany()"},
+          {"question": "What does passing an empty filter `{}` to `find()` return?", "options": ["No documents", "All documents in the collection", "A syntax error", "Only documents with null _id"], "answer": "All documents in the collection"}
+        ]
+      },
+      {
+        "chapter_number": 3,
+        "chapter_title": "Chapter 3: Update Modifiers & Array Manipulations",
+        "content": "Deep dive into atomic field modifiers ($set, $inc, $unset) and array updates ($push, $addToSet, $pull, positional operators $ and $[<identifier>]).",
+        "quiz": [
+          {"question": "Which modifier updates a field or creates it if it does not already exist?", "options": ["$set", "$put", "$update", "$add"], "answer": "$set"},
+          {"question": "Which operator atomically increments a numeric counter by a specified step?", "options": ["$step", "$inc", "$sum", "$counter"], "answer": "$inc"},
+          {"question": "How do you append a unique value to an array only if it is not already present?", "options": ["$push", "$addToSet", "$append", "$insertUnique"], "answer": "$addToSet"},
+          {"question": "Which operator removes a specified attribute completely from a document?", "options": ["$delete", "$remove", "$unset", "$drop"], "answer": "$unset"},
+          {"question": "Which modifier removes all instances of a specific value matching a condition from an array?", "options": ["$pull", "$pop", "$shift", "$splice"], "answer": "$pull"},
+          {"question": "What modifier option creates a new document if no documents match the query criteria during update?", "options": ["upsert: true", "createIfMissing: true", "fallback: true", "insertMode: true"], "answer": "upsert: true"},
+          {"question": "What does `$pop: { tags: 1 }` do to an array field named tags?", "options": ["Removes the first element", "Removes the last element", "Reverses the array", "Clears the entire array"], "answer": "Removes the last element"},
+          {"question": "Which positional operator identifies the first array element matching query conditions?", "options": ["$", "$[]", "$[item]", "$*"], "answer": "$"},
+          {"question": "Which operator updates all elements inside an array matching a specific condition simultaneously?", "options": ["$all", "$[]", "$[<identifier>]", "$each"], "answer": "$[<identifier>]"},
+          {"question": "Which modifier is used alongside $push to append multiple items at once?", "options": ["$each", "$batch", "$all", "$multi"], "answer": "$each"}
+        ]
+      },
+      {
+        "chapter_number": 4,
+        "chapter_title": "Chapter 4: Schema Design — Embedding vs Referencing",
+        "content": "Analyzing data relationship modeling tradeoffs: 1-to-1, 1-to-few, 1-to-many, and 1-to-squillions. Choosing between normalized referencing and denormalized embedded documents.",
+        "quiz": [
+          {"question": "What is the primary operational benefit of embedding related documents?", "options": ["Lower data redundancy", "Single read operation without joins", "Guaranteed ACID locks across servers", "Smaller disk footprints always"], "answer": "Single read operation without joins"},
+          {"question": "When is document referencing preferred over embedding?", "options": ["For 1-to-few static lists", "When subdocuments exceed 16MB or have unbound 1-to-many growth", "When fast atomic single-document writes are needed", "For simple lookup labels"], "answer": "When subdocuments exceed 16MB or have unbound 1-to-many growth"},
+          {"question": "What is a major risk of nesting an unbounded array of child documents?", "options": ["Exceeding the 16MB BSON document limit", "Deadlocking the cluster", "Invalidating index files automatically", "Memory buffer segmentation"], "answer": "Exceeding the 16MB BSON document limit"},
+          {"question": "What anti-pattern describes continually expanding embedded arrays causing frequent document moves on disk?", "options": ["Massive Array Anti-pattern", "Unbounded Growth Anti-pattern", "Bucket Bloat", "Fragment Chain"], "answer": "Unbounded Growth Anti-pattern"},
+          {"question": "In an e-commerce schema, why is a user's address often embedded inside an Order document?", "options": ["To reflect the historical address at purchase time (snapshotting)", "To avoid duplicate address tables in SQL", "Because MongoDB cannot link collections", "To speed up user login"], "answer": "To reflect the historical address at purchase time (snapshotting)"},
+          {"question": "What design pattern groups sequential sensor readings into a single document per hour/day?", "options": ["Polymorphic Pattern", "Bucket Pattern", "Tree Pattern", "Attribute Pattern"], "answer": "Bucket Pattern"},
+          {"question": "Which schema pattern handles entities that share common fields alongside varying specialized attributes?", "options": ["Polymorphic Pattern", "Outlier Pattern", "Subset Pattern", "Proxy Pattern"], "answer": "Polymorphic Pattern"},
+          {"question": "When implementing the Subset Pattern, where is the most frequently accessed data stored?", "options": ["In a separate cold collection", "Embedded in the main document", "In a local text file", "In a temporary cache cursor"], "answer": "Embedded in the main document"},
+          {"question": "What operator checks if an array field contains all elements specified in a query list?", "options": ["$in", "$all", "$containsAll", "$matchList"], "answer": "$all"},
+          {"question": "In MongoDB referencing, what data type typically stores the foreign relationship pointer?", "options": ["String", "ObjectId", "UUIDv4", "Integer"], "answer": "ObjectId"}
+        ]
+      },
+      {
+        "chapter_number": 5,
+        "chapter_title": "Chapter 5: Indexing Mechanisms & Query Execution Plans",
+        "content": "Single field, compound, multikey, text, and TTL indexes. Analyzing index selectivity with explain('executionStats') and understanding ESR (Equality, Sort, Range) indexing rules.",
+        "quiz": [
+          {"question": "What data structure does MongoDB use under the hood to store indexes?", "options": ["Hash Table", "B-Tree", "Linked List", "Radix Tree"], "answer": "B-Tree"},
+          {"question": "What is the ESR rule for building optimal compound indexes?", "options": ["Equality, Sort, Range", "Execution, Selectivity, Read", "Entity, Schema, Relation", "Engine, Storage, Record"], "answer": "Equality, Sort, Range"},
+          {"question": "What index type automatically creates an entry for each element in an indexed array field?", "options": ["Text Index", "Multikey Index", "Compound Index", "Sparse Index"], "answer": "Multikey Index"},
+          {"question": "What does a COLLSCAN stage indicate in an explain plan?", "options": ["The query performed an efficient index seek", "The engine performed a full collection scan", "The query ran concurrently in cache", "The index was corrupted"], "answer": "The engine performed a full collection scan"},
+          {"question": "Which index type automatically purges documents after an elapsed time period?", "options": ["TTL (Time To Live) Index", "Sparse Index", "Expiring Compound Index", "Temporal B-Tree"], "answer": "TTL (Time To Live) Index"},
+          {"question": "What is a 'covered query' in MongoDB?", "options": ["A query satisfied entirely from index keys without reading document data", "A query protected with TLS encryption", "A query with ACID transaction support", "A query verified by replica sets"], "answer": "A query satisfied entirely from index keys without reading document data"},
+          {"question": "Which method generates diagnostic execution statistics for a query?", "options": ["explain('executionStats')", "profile('all')", "analyzeQuery()", "inspect()"], "answer": "explain('executionStats')"},
+          {"question": "What happens if you insert too many indexes on a high-throughput write collection?", "options": ["Write performance degrades because every index must be updated", "Disk space is freed automatically", "Reads become slower", "Queries abort with timeout exceptions"], "answer": "Write performance degrades because every index must be updated"},
+          {"question": "Which index type indexes fields only if they are present in a document?", "options": ["Sparse Index", "Partial Index", "Unique Index", "Hashed Index"], "answer": "Sparse Index"},
+          {"question": "Can a compound index have more than one array field indexed?", "options": ["Yes, unlimited", "No, MongoDB restricts compound multikey indexes to at most one array field", "Only with WiredTiger", "Only in sharded clusters"], "answer": "No, MongoDB restricts compound multikey indexes to at most one array field"}
+        ]
+      },
+      {
+        "chapter_number": 6,
+        "chapter_title": "Chapter 6: Aggregation Framework Foundations",
+        "content": "Data transformation pipelines. Deep dive into fundamental stages: $match, $project, $group, $sort, and $limit, alongside accumulator operators like $sum, $avg, $min, and $max.",
+        "quiz": [
+          {"question": "What method invokes an aggregation pipeline on a MongoDB collection?", "options": ["db.coll.pipe()", "db.coll.aggregate()", "db.coll.transform()", "db.coll.stream()"], "answer": "db.coll.aggregate()"},
+          {"question": "Why should $match stages be placed as early as possible in a pipeline?", "options": ["To leverage indexes and filter out unnecessary documents early", "Because $match is only valid at index 0", "To encrypt documents before processing", "To sort records automatically"], "answer": "To leverage indexes and filter out unnecessary documents early"},
+          {"question": "In a $group stage, what attribute defines the grouping key?", "options": ["_id", "key", "groupBy", "groupKey"], "answer": "_id"},
+          {"question": "Which accumulator calculates the total count of documents in a $group stage?", "options": ["{$count: 1}", "{$sum: 1}", "{$total: 1}", "{$increment: 1}"], "answer": "{$sum: 1}"},
+          {"question": "What pipeline stage is used to rename, inject, or discard fields from output documents?", "options": ["$project", "$map", "$transform", "$filter"], "answer": "$project"},
+          {"question": "Which operator calculates the arithmetic average of numeric field values during grouping?", "options": ["$mean", "$avg", "$calcAvg", "$divide"], "answer": "$avg"},
+          {"question": "How do you specify a descending sort on an aggregation stage?", "options": ["{$sort: {score: -1}}", "{$sort: {score: 'DESC'}}", "{$sort: {score: 0}}", "{$sort: {score: false}}"], "answer": "{$sort: {score: -1}}"},
+          {"question": "What memory limit does a single aggregation pipeline stage encounter before requiring allowDiskUse?", "options": ["10 MB", "50 MB", "100 MB", "500 MB"], "answer": "100 MB"},
+          {"question": "Which pipeline stage restricts the total number of documents passed to downstream stages?", "options": ["$limit", "$slice", "$cap", "$top"], "answer": "$limit"},
+          {"question": "What operator groups values into an array during a $group stage without duplicates?", "options": ["$push", "$addToSet", "$collect", "$gather"], "answer": "$addToSet"}
+        ]
+      },
+      {
+        "chapter_number": 7,
+        "chapter_title": "Chapter 7: Advanced Aggregations — Joins & Array Deconstruction",
+        "content": "Mastering $unwind, $lookup for relational joins between disparate collections, sub-pipeline transformations, and analytical stages such as $facet and $bucket.",
+        "quiz": [
+          {"question": "Which aggregation stage deconstructs an array field, outputting one document per element?", "options": ["$unwind", "$split", "$expand", "$flatten"], "answer": "$unwind"},
+          {"question": "Which stage performs a left outer join to an unsharded collection in the same database?", "options": ["$join", "$lookup", "$merge", "$connect"], "answer": "$lookup"},
+          {"question": "What field in a $lookup specification names the array where matched foreign documents are placed?", "options": ["as", "output", "target", "into"], "answer": "as"},
+          {"question": "Which stage categorizes incoming documents into specific numerical buckets based on boundary ranges?", "options": ["$bucket", "$rangeGroup", "$partition", "$categorize"], "answer": "$bucket"},
+          {"question": "What stage allows executing multiple aggregation pipelines within a single stage on the same incoming documents?", "options": ["$facet", "$splitPipelines", "$multiPipe", "$fork"], "answer": "$facet"},
+          {"question": "What happens to a document in $unwind if the targeted array field is empty or missing by default?", "options": ["It is ignored and discarded from output", "It raises an exception", "It outputs a null value", "It halts pipeline execution"], "answer": "It is ignored and discarded from output"},
+          {"question": "Which option in $unwind preserves documents where the specified array field is null or empty?", "options": ["preserveNullAndEmptyArrays: true", "keepEmpty: true", "allowNull: true", "ignoreMissing: false"], "answer": "preserveNullAndEmptyArrays: true"},
+          {"question": "Which stage writes the resulting documents of an aggregation directly into another collection?", "options": ["$out / $merge", "$save", "$export", "$writeTarget"], "answer": "$out / $merge"},
+          {"question": "What is the primary operational advantage of $merge over $out?", "options": ["$merge can update an existing target collection incrementally without replacing it", "$merge runs faster in RAM", "$merge supports CSV export", "$merge automatically indexes text"], "answer": "$merge can update an existing target collection incrementally without replacing it"},
+          {"question": "Can $lookup join collections located on different MongoDB clusters?", "options": ["No, it requires collections in the same database or cluster instance", "Yes, across any remote IP", "Only if TLS is disabled", "Only with sharded keys"], "answer": "No, it requires collections in the same database or cluster instance"}
+        ]
+      },
+      {
+        "chapter_number": 8,
+        "chapter_title": "Chapter 8: High Availability & Replica Set Architecture",
+        "content": "Distributed replica set topologies: Primaries, Secondaries, and Arbiters. Consensus via Raft-like election protocols, write concern (w: majority), and read preferences.",
+        "quiz": [
+          {"question": "What is the minimum recommended number of voting nodes in a production MongoDB replica set?", "options": ["1", "2", "3", "5"], "answer": "3"},
+          {"question": "Which node in a replica set accepts all write operations by default?", "options": ["Primary", "Secondary", "Arbiter", "Router"], "answer": "Primary"},
+          {"question": "What special log records all data modifications on a replica set node for replication sync?", "options": ["binlog", "oplog (Operations Log)", "redolog", "wal"], "answer": "oplog (Operations Log)"},
+          {"question": "What is the primary role of an Arbiter node in a replica set?", "options": ["Vote in elections without storing data", "Cache reads in memory", "Act as a backup master", "Route network traffic"], "answer": "Vote in elections without storing data"},
+          {"question": "Which write concern ensures data is committed to a majority of voting replica members?", "options": ["{w: 1}", "{w: 0}", "{w: 'majority'}", "{w: 'all'}"], "answer": "{w: 'majority'}"},
+          {"question": "What read preference directs queries to secondary nodes to offload read pressure from the primary?", "options": ["primaryPreferred", "secondary", "nearest", "balanced"], "answer": "secondary"},
+          {"question": "What happens if a primary node crashes or loses network heartbeat in a replica set?", "options": ["The remaining voting nodes elect a new primary automatically", "The cluster halts until restarted manually", "Secondaries delete their oplogs", "Writes redirect to disk files"], "answer": "The remaining voting nodes elect a new primary automatically"},
+          {"question": "What command initiates a replica set configuration in the mongosh shell?", "options": ["rs.initiate()", "db.startReplica()", "rs.bootstrap()", "cluster.setup()"], "answer": "rs.initiate()"},
+          {"question": "How often do members of a replica set send heartbeats to each other?", "options": ["Every 100ms", "Every 2 seconds", "Every 10 seconds", "Every 60 seconds"], "answer": "Every 2 seconds"},
+          {"question": "What is the consequence of setting write concern to `{w: 0}`?", "options": ["No network acknowledgement is returned from the database", "Transactions are rolled back", "Writes are replicated to zero secondaries only", "Write errors trigger cluster crashes"], "answer": "No network acknowledgement is returned from the database"}
+        ]
+      },
+      {
+        "chapter_number": 9,
+        "chapter_title": "Chapter 9: Horizontal Scaling & Sharding Architecture",
+        "content": "Horizontal partitioning mechanics. Shard keys, config servers, mongos query routers, range-based vs hashed sharding, and chunk balancing routines.",
+        "quiz": [
+          {"question": "What component acts as the client-facing routing service in a sharded MongoDB cluster?", "options": ["mongod", "mongos", "mongo-router", "balancer"], "answer": "mongos"},
+          {"question": "Where is the cluster metadata and routing configuration stored in a sharded cluster?", "options": ["Config Servers", "Primary Shard", "Local RAM on client", "WiredTiger log files"], "answer": "Config Servers"},
+          {"question": "What field or combination of fields determines how data is distributed across shards?", "options": ["Partition Id", "Shard Key", "Cluster Hash", "Distribution Index"], "answer": "Shard Key"},
+          {"question": "Which sharding strategy ensures even data distribution across shards for monotonically increasing values?", "options": ["Range-based Sharding", "Hashed Sharding", "Zone Sharding", "Alphabetical Sharding"], "answer": "Hashed Sharding"},
+          {"question": "What process migrates data chunks between shards when an imbalance occurs?", "options": ["The Balancer", "The Replicator", "The Shard Synchronizer", "The Garbage Collector"], "answer": "The Balancer"},
+          {"question": "What is the primary consequence of choosing a low-cardinality shard key (e.g., status: active/inactive)?", "options": ["Jumbo chunks that cannot be split across shards", "Instant cluster failure", "CPU overheating", "Loss of all index data"], "answer": "Jumbo chunks that cannot be split across shards"},
+          {"question": "What query type occurs when a query does not include the shard key in its filter criteria?", "options": ["Targeted Query", "Scatter-Gather Query", "Linear Scan Query", "Direct Seek Query"], "answer": "Scatter-Gather Query"},
+          {"question": "Can you change the shard key of an existing sharded collection in modern MongoDB?", "options": ["Yes, using refineCollectionShardKey", "No, it is permanently locked forever", "Only by deleting the cluster", "Only with an SQL migration tool"], "answer": "Yes, using refineCollectionShardKey"},
+          {"question": "What is the default size of a data chunk before the balancer considers splitting it?", "options": ["16 MB", "64 MB", "128 MB", "256 MB"], "answer": "64 MB"},
+          {"question": "In a sharded cluster, does each shard represent an independent replica set?", "options": ["Yes, for high availability and fault tolerance", "No, each shard is a standalone server", "Only on development environments", "Only when using memory engines"], "answer": "Yes, for high availability and fault tolerance"}
+        ]
+      },
+      {
+        "chapter_number": 10,
+        "chapter_title": "Chapter 10: Security, Transactions & Storage Engine Internals",
+        "content": "Role-Based Access Control (RBAC), TLS encryption, WiredTiger cache concurrency, write-ahead journaling (WAL), and multi-document ACID transactions.",
+        "quiz": [
+          {"question": "What storage engine is the default high-performance engine in modern MongoDB?", "options": ["MMAPv1", "WiredTiger", "In-Memory", "RocksDB"], "answer": "WiredTiger"},
+          {"question": "At what level does WiredTiger provide lock concurrency during write operations?", "options": ["Database level", "Collection level", "Document (Row) level", "Cluster level"], "answer": "Document (Row) level"},
+          {"question": "What mechanism ensures durability by logging writes before committing them to data files?", "options": ["Write-Ahead Journal", "Checkpoint Table", "Oplog Dump", "RAM Buffer Mirror"], "answer": "Write-Ahead Journal"},
+          {"question": "What authorization model assigns privileges to users based on distinct roles?", "options": ["RBAC (Role-Based Access Control)", "ABAC", "DAC", "Static Credential Ring"], "answer": "RBAC (Role-Based Access Control)"},
+          {"question": "Are multi-document ACID transactions supported across multiple collections in MongoDB?", "options": ["Yes, since MongoDB 4.0 (and 4.2 for sharded clusters)", "No, MongoDB only supports single-document atomicity", "Only for read operations", "Only in memory-first clusters"], "answer": "Yes, since MongoDB 4.0 (and 4.2 for sharded clusters)"},
+          {"question": "What command starts a multi-document transaction in a client session?", "options": ["session.startTransaction()", "db.beginTransaction()", "session.lock()", "db.transact()"], "answer": "session.startTransaction()"},
+          {"question": "How frequently does WiredTiger create flush checkpoints on disk by default?", "options": ["Every 100 milliseconds", "Every 60 seconds (or 2GB of data)", "Every 15 minutes", "Only upon server shutdown"], "answer": "Every 60 seconds (or 2GB of data)"},
+          {"question": "What protocol provides in-transit transport layer security for MongoDB connections?", "options": ["TLS/SSL", "SSH Tunnel", "BSON-Crypt", "PGP"], "answer": "TLS/SSL"},
+          {"question": "What built-in role provides full administrative control over all databases in the cluster?", "options": ["readWriteAnyDatabase", "root", "dbAdmin", "clusterManager"], "answer": "root"},
+          {"question": "What feature encrypts sensitive document fields on the client before transmission to the database server?", "options": ["CSFLE (Client-Side Field Level Encryption)", "Disk Crypt", "BSON Obfuscator", "Network Hashing"], "answer": "CSFLE (Client-Side Field Level Encryption)"}
+        ]
+      }
+    ]
+  },
+  {
+    "title_keyword": "Neo4j Graph Databases & Relationship Modeling",
+    "course_title": "Neo4j Graph Databases & Relationship Modeling",
+    "description": "Learn property graphs, Cypher query language, and connected data traversal patterns.",
+    "duration": "4 Weeks",
+    "chapters": [
+      {
+        "chapter_number": 1,
+        "chapter_title": "Chapter 1: Property Graph Model & Core Fundamentals",
+        "content": "Graph model foundations. Nodes, directed relationships, labels, properties, and comparing graph traversal against relational table foreign key joins.",
+        "quiz": [
+          {"question": "What are the primary structural building blocks of a Property Graph?", "options": ["Tables, rows, and columns", "Nodes, relationships, and properties", "Documents, collections, and keys", "Buckets, keys, and values"], "answer": "Nodes, relationships, and properties"},
+          {"question": "What architectural capability enables Neo4j to traverse connected nodes in O(1) constant time per hop?", "options": ["Index-Free Adjacency", "Relational foreign keys", "B-Tree cluster lookups", "Inverted text indexes"], "answer": "Index-Free Adjacency"},
+          {"question": "Can a relationship in Neo4j exist without a direction?", "options": ["No, every relationship must have a start node and an end node", "Yes, all relationships are undirected by default", "Only if labeled as bidirectional", "Only in Neo4j Desktop"], "answer": "No, every relationship must have a start node and an end node"},
+          {"question": "What do labels represent when attached to nodes?", "options": ["Entity categorization / types", "Unique integer identifiers", "Database shard numbers", "Cipher keys"], "answer": "Entity categorization / types"},
+          {"question": "Can relationships in Neo4j possess their own properties and attributes?", "options": ["Yes, relationships can store key-value properties", "No, only nodes can store properties", "Only numeric properties are allowed", "Only if indexed"], "answer": "Yes, relationships can store key-value properties"},
+          {"question": "In graph data modeling, what do nodes typically represent?", "options": ["Nouns / Entities", "Verbs / Actions", "Indexes", "Relational triggers"], "answer": "Nouns / Entities"},
+          {"question": "In graph data modeling, what do relationships typically represent?", "options": ["Verbs / Interactions / Connections", "Tables", "Foreign key constraints", "Static files"], "answer": "Verbs / Interactions / Connections"},
+          {"question": "What query language is designed specifically for expressive graph querying in Neo4j?", "options": ["Cypher", "SQL", "SPARQL", "GraphQL"], "answer": "Cypher"},
+          {"question": "Why do relational databases experience exponential latency slowdowns on deep graph traversals?", "options": ["Expensive Cartesian product recursive JOIN operations", "Lack of CPU support", "Fixed disk block limits", "B-Trees cannot store foreign keys"], "answer": "Expensive Cartesian product recursive JOIN operations"},
+          {"question": "What visual web tool is included with Neo4j to visualize and explore graphs interactively?", "options": ["Neo4j Browser", "Neo4j Workbench", "Graph Studio", "Cypher CLI"], "answer": "Neo4j Browser"}
+        ]
+      },
+      {
+        "chapter_number": 2,
+        "chapter_title": "Chapter 2: Cypher Syntax — MATCH, WHERE & Pattern Matching",
+        "content": "Mastering Cypher queries. ASCII-art pattern syntax (node)-[rel]->(node), filtering with WHERE, projection with RETURN, and ordering with ORDER BY.",
+        "quiz": [
+          {"question": "How is a node visually represented in Cypher pattern syntax?", "options": ["Parentheses ( )", "Square brackets [ ]", "Curly braces { }", "Angle brackets < >"], "answer": "Parentheses ( )"},
+          {"question": "How is a directed relationship visually represented in Cypher syntax?", "options": ["-->", "-[r]->", "==>", "<-.-"], "answer": "-[r]->"},
+          {"question": "Which clause is used to search for existing patterns in a Neo4j database?", "options": ["MATCH", "FIND", "SELECT", "GET"], "answer": "MATCH"},
+          {"question": "Which clause specifies what data attributes or nodes to output from a Cypher query?", "options": ["RETURN", "SELECT", "OUTPUT", "DISPLAY"], "answer": "RETURN"},
+          {"question": "Which clause filters matching graph patterns based on predicates and boolean conditions?", "options": ["WHERE", "FILTER", "HAVING", "LIMIT"], "answer": "WHERE"},
+          {"question": "How do you filter a node with label 'Person' and property 'age' greater than 25 in MATCH?", "options": ["MATCH (p:Person) WHERE p.age > 25", "MATCH (Person) FILTER age > 25", "SELECT p FROM Person WHERE age > 25", "MATCH {Person} WHERE p.age > 25"], "answer": "MATCH (p:Person) WHERE p.age > 25"},
+          {"question": "How do you count the number of matching records returned in Cypher?", "options": ["count(*)", "sum()", "length()", "total()"], "answer": "count(*)"},
+          {"question": "Which keyword sorts the result set by a specific attribute in ascending or descending order?", "options": ["ORDER BY", "SORT BY", "ARRANGE", "RANK"], "answer": "ORDER BY"},
+          {"question": "What clause limits the number of rows returned by a Cypher query?", "options": ["LIMIT", "TOP", "CAP", "FIRST"], "answer": "LIMIT"},
+          {"question": "How do you match a relationship regardless of direction during a read query?", "options": ["(a)-[r]-(b)", "(a)<-[r]->(b)", "(a)==[r]==(b)", "(a)~~[r]~~(b)"], "answer": "(a)-[r]-(b)"}
+        ]
+      },
+      {
+        "chapter_number": 3,
+        "chapter_title": "Chapter 3: Graph Mutation — CREATE, MERGE & SET",
+        "content": "Graph mutations. Instantiating nodes and relationships using CREATE, idempotent upserts with MERGE, modifying properties with SET, and removing attributes with REMOVE.",
+        "quiz": [
+          {"question": "Which clause unconditionally creates new nodes or relationships in the graph?", "options": ["CREATE", "INSERT", "ADD", "NEW"], "answer": "CREATE"},
+          {"question": "Which clause ensures a pattern exists, matching it if present or creating it if absent (upsert)?", "options": ["MERGE", "UPSERT", "FIND_OR_CREATE", "ENSURE"], "answer": "MERGE"},
+          {"question": "Which sub-clause runs only when a MERGE clause instantiates a brand new pattern?", "options": ["ON CREATE SET", "ON MATCH SET", "ON NEW INSERT", "ON MISSING PUT"], "answer": "ON CREATE SET"},
+          {"question": "Which sub-clause runs only when a MERGE clause finds an existing pattern in the graph?", "options": ["ON MATCH SET", "ON CREATE SET", "ON FOUND UPDATE", "ON EXIST MODIFY"], "answer": "ON MATCH SET"},
+          {"question": "Which keyword assigns or updates a property value on a node or relationship?", "options": ["SET", "UPDATE", "PUT", "ASSIGN"], "answer": "SET"},
+          {"question": "Which keyword removes a property or label from a node?", "options": ["REMOVE", "DELETE", "DROP", "UNSET"], "answer": "REMOVE"},
+          {"question": "Can multiple labels be assigned to a single node using SET?", "options": ["Yes (e.g., SET n:Person:Author)", "No, nodes can only have 1 label", "Only in Enterprise Edition", "Only if no properties exist"], "answer": "Yes (e.g., SET n:Person:Author)"},
+          {"question": "What happens if you run `CREATE (n:User {name: 'Alice'})` three times?", "options": ["Three distinct nodes with name 'Alice' are created", "An error occurs on the second attempt", "Only one node is kept", "The property is overwritten"], "answer": "Three distinct nodes with name 'Alice' are created"},
+          {"question": "How do you delete a property called 'temporary_code' using SET?", "options": ["SET n.temporary_code = null", "SET n.temporary_code = 0", "SET n.temporary_code = false", "SET n.temporary_code = ''"], "answer": "SET n.temporary_code = null"},
+          {"question": "How are properties formatted when creating a node inline?", "options": ["Curly braces {key: 'value'}", "Square brackets [key: 'value']", "Parentheses (key: 'value')", "Colons :key: 'value'"], "answer": "Curly braces {key: 'value'}"}
+        ]
+      },
+      {
+        "chapter_number": 4,
+        "chapter_title": "Chapter 4: Safe Deletions & Referential Integrity",
+        "content": "Understanding node and edge life-cycles. Managing DELETE vs DETACH DELETE, avoiding orphan reference traps, and enforcing structural constraints.",
+        "quiz": [
+          {"question": "What error occurs if you try to `DELETE` a node that still has attached relationships?", "options": ["ConstraintValidationFailed / Cannot delete node with relationships", "The relationships are deleted silently", "The node becomes hidden", "Database corruption"], "answer": "ConstraintValidationFailed / Cannot delete node with relationships"},
+          {"question": "Which Cypher command safely deletes a node along with all its incoming and outgoing relationships?", "options": ["DETACH DELETE", "CASCADE DELETE", "FORCE DROP", "REMOVE ALL"], "answer": "DETACH DELETE"},
+          {"question": "How do you delete a relationship without deleting the connected nodes?", "options": ["MATCH (a)-[r:KNOWS]->(b) DELETE r", "MATCH (a)-[r:KNOWS]->(b) DETACH DELETE r", "DROP RELATIONSHIP KNOWS", "REMOVE r"], "answer": "MATCH (a)-[r:KNOWS]->(b) DELETE r"},
+          {"question": "How do you wipe out all nodes and relationships in a development database?", "options": ["MATCH (n) DETACH DELETE n", "DROP DATABASE ALL", "TRUNCATE GRAPH", "DELETE *"], "answer": "MATCH (n) DETACH DELETE n"},
+          {"question": "What constraint ensures that a property value must be distinct across all nodes of a label?", "options": ["IS UNIQUE", "IS PRIMARY", "DISTINCT ONLY", "NO_DUPLICATES"], "answer": "IS UNIQUE"},
+          {"question": "What constraint ensures that a specific property cannot be null on a node label?", "options": ["IS NOT NULL", "REQUIRED", "MANDATORY", "CHECK_EXISTS"], "answer": "IS NOT NULL"},
+          {"question": "What happens to the graph if an operation violates a defined UNIQUE constraint?", "options": ["The transaction fails and rolls back completely", "The duplicate is silently ignored", "The old node is overwritten", "A warning is logged but saved"], "answer": "The transaction fails and rolls back completely"},
+          {"question": "Can you delete a relationship type schema definition without deleting instances?", "options": ["No, relationship types exist dynamically based on instances", "Yes, with DROP TYPE", "Only in Neo4j Browser", "Only through REST API"], "answer": "No, relationship types exist dynamically based on instances"},
+          {"question": "What keyword is used to remove an established database constraint?", "options": ["DROP CONSTRAINT", "DELETE CONSTRAINT", "UNSET RULE", "REMOVE CONSTRAINT"], "answer": "DROP CONSTRAINT"},
+          {"question": "Which clause provides optional pattern matching similar to a SQL LEFT JOIN?", "options": ["OPTIONAL MATCH", "TRY MATCH", "MAYBE MATCH", "LEFT MATCH"], "answer": "OPTIONAL MATCH"}
+        ]
+      },
+      {
+        "chapter_number": 5,
+        "chapter_title": "Chapter 5: Variable-Length Paths & Graph Traversal",
+        "content": "Navigating multi-hop networks. Defining variable-length relationship patterns `*1..5`, detecting shortest paths using shortestPath(), and resolving circular cycles.",
+        "quiz": [
+          {"question": "How do you specify a path of variable length between 1 and 3 hops in Cypher?", "options": ["-[*1..3]->", "-[..3]->", "-[1-3]->", "-[*..]->"], "answer": "-[*1..3]->"},
+          {"question": "What function computes the shortest route between two specific nodes?", "options": ["shortestPath()", "findFastest()", "minDistance()", "quickPath()"], "answer": "shortestPath()"},
+          {"question": "What built-in function calculates the number of relationships in a matched path variable?", "options": ["length(p)", "count(p)", "hops(p)", "size(p)"], "answer": "length(p)"},
+          {"question": "What function finds all tied shortest paths between two endpoints in a graph?", "options": ["allShortestPaths()", "shortestPathsList()", "allMinRoutes()", "tiedPaths()"], "answer": "allShortestPaths()"},
+          {"question": "What does `-[*]->` indicate in a pattern matching query?", "options": ["Any number of relationship hops (unbounded)", "Exactly 1 hop", "Zero hops only", "A bidirectional hop"], "answer": "Any number of relationship hops (unbounded)"},
+          {"question": "Why is executing an unbounded variable-length traversal (`-[*]->`) risky on large graphs?", "options": ["It can traverse millions of paths, causing out-of-memory errors", "It causes hard drive partition damage", "It disables all indexing", "It deletes duplicate nodes"], "answer": "It can traverse millions of paths, causing out-of-memory errors"},
+          {"question": "How does Cypher prevent infinite loops during path traversals on cyclic graphs?", "options": ["Relationship uniqueness (a relationship cannot appear more than once in a path)", "Timeouts after 5 seconds", "Hardcoded depth limit of 3", "Node locks"], "answer": "Relationship uniqueness (a relationship cannot appear more than once in a path)"},
+          {"question": "What function extracts all nodes along a path variable `p` into a list?", "options": ["nodes(p)", "getNodes(p)", "pathNodes(p)", "extract(p)"], "answer": "nodes(p)"},
+          {"question": "What function extracts all relationships along a path variable `p` into a list?", "options": ["relationships(p)", "edges(p)", "rels(p)", "getLinks(p)"], "answer": "relationships(p)"},
+          {"question": "How do you check if a specific relationship type occurs in a multi-hop pattern?", "options": ["-[:FOLLOWS*1..3]->", "-[:FOLLOWS(1..3)]->", "-(*1..3:FOLLOWS)->", "-[FOLLOWS * 3]->"], "answer": "-[:FOLLOWS*1..3]->"}
+        ]
+      },
+      {
+        "chapter_number": 6,
+        "chapter_title": "Chapter 6: Aggregations, Collections & List Comprehensions",
+        "content": "Analytical operations in Cypher. Aggregating values using collect(), unfolding arrays using UNWIND, filtering lists, and calculating summary metrics.",
+        "quiz": [
+          {"question": "Which function aggregates individual values or nodes into a single Cypher list?", "options": ["collect()", "toList()", "gather()", "array()"], "answer": "collect()"},
+          {"question": "Which clause expands a list back into individual rows, acting as the inverse of collect()?", "options": ["UNWIND", "EXPLODE", "FLATTEN", "EXPAND"], "answer": "UNWIND"},
+          {"question": "How do you find the distinct number of cities in a dataset?", "options": ["count(DISTINCT p.city)", "distinct(count(p.city))", "uniqueCount(p.city)", "collect(p.city).unique"], "answer": "count(DISTINCT p.city)"},
+          {"question": "Which function returns the number of items contained in a list?", "options": ["size()", "length()", "count()", "dimension()"], "answer": "size()"},
+          {"question": "How does Cypher determine grouping keys during aggregation queries?", "options": ["Implicit grouping based on all non-aggregate expressions in the RETURN clause", "Explicit GROUP BY clause is required", "By the first MATCH label", "Using the _id field"], "answer": "Implicit grouping based on all non-aggregate expressions in the RETURN clause"},
+          {"question": "Which clause passes intermediate results from one query part to the next for pipelining?", "options": ["WITH", "THEN", "PIPE", "NEXT"], "answer": "WITH"},
+          {"question": "What function calculates the mathematical average of a numeric property?", "options": ["avg()", "mean()", "calculateAverage()", "sum() / count() only"], "answer": "avg()"},
+          {"question": "What predicate tests whether a list contains at least one item meeting a condition?", "options": ["any(x IN list WHERE predicate)", "some(list)", "has(list)", "exists(list)"], "answer": "any(x IN list WHERE predicate)"},
+          {"question": "What predicate verifies that all items in a list meet a condition?", "options": ["all(x IN list WHERE predicate)", "every(list)", "total(list)", "complete(list)"], "answer": "all(x IN list WHERE predicate)"},
+          {"question": "What function returns the highest value from a set of numeric expressions?", "options": ["max()", "highest()", "top()", "peak()"], "answer": "max()"}
+        ]
+      },
+      {
+        "chapter_number": 7,
+        "chapter_title": "Chapter 7: APOC Library & Advanced Procedure Tooling",
+        "content": "Awesome Procedures on Cypher (APOC). Executing utility procedures, batching heavy updates with apoc.periodic.iterate, and dynamic Cypher generation.",
+        "quiz": [
+          {"question": "What does the acronym APOC stand for in the Neo4j ecosystem?", "options": ["Awesome Procedures On Cypher", "Advanced Performance Object Connector", "Automated Path Optimization Compiler", "Analytical Property Operational Controller"], "answer": "Awesome Procedures On Cypher"},
+          {"question": "Which clause is used to invoke stored procedures and functions in Cypher?", "options": ["CALL", "EXEC", "INVOKE", "RUN"], "answer": "CALL"},
+          {"question": "Which APOC procedure runs heavy updates in controlled transaction batches to avoid out-of-memory errors?", "options": ["apoc.periodic.iterate", "apoc.batch.commit", "apoc.transaction.chunk", "apoc.memory.split"], "answer": "apoc.periodic.iterate"},
+          {"question": "Which APOC procedure dynamically imports JSON data directly from an HTTP URL or local file?", "options": ["apoc.load.json", "apoc.import.file", "apoc.fetch.json", "apoc.read.data"], "answer": "apoc.load.json"},
+          {"question": "How do you yield specific output fields from a procedure call in Cypher?", "options": ["YIELD fieldName", "SELECT fieldName", "RETURN fieldName", "OUTPUT fieldName"], "answer": "YIELD fieldName"},
+          {"question": "Which APOC procedure exports subgraph structures into standard formats like GraphML or Cypher statements?", "options": ["apoc.export.*", "apoc.dump.*", "apoc.save.*", "apoc.stream.*"], "answer": "apoc.export.*"},
+          {"question": "Can custom user-defined procedures written in Java be deployed directly into Neo4j plugins?", "options": ["Yes, by deploying JAR files to the plugins directory", "No, Neo4j only supports Cypher scripts", "Only in Docker environments", "Only with an Enterprise license"], "answer": "Yes, by deploying JAR files to the plugins directory"},
+          {"question": "What APOC utility allows executing dynamically generated Cypher text strings?", "options": ["apoc.cypher.run", "apoc.eval.string", "apoc.execute.raw", "apoc.query.parse"], "answer": "apoc.cypher.run"},
+          {"question": "Which APOC procedure generates UUID values for nodes automatically?", "options": ["apoc.create.uuid", "apoc.uuid.install", "apoc.id.generate", "apoc.hash.new"], "answer": "apoc.create.uuid"},
+          {"question": "What procedure lists all available APOC procedures currently registered on the server?", "options": ["SHOW PROCEDURES YIELD name WHERE name STARTS WITH 'apoc'", "CALL apoc.help()", "LIST PROCEDURES", "GET apoc.all()"], "answer": "SHOW PROCEDURES YIELD name WHERE name STARTS WITH 'apoc'"}
+        ]
+      },
+      {
+        "chapter_number": 8,
+        "chapter_title": "Chapter 8: Graph Data Science (GDS) & Algorithms",
+        "content": "Graph Data Science library. In-memory graph projections, centrality metrics (PageRank, Betweenness), community detection (Louvain, Label Propagation), and pathfinding.",
+        "quiz": [
+          {"question": "What algorithm calculates the influence and importance of a node based on incoming connections from other influential nodes?", "options": ["PageRank", "Dijkstra", "Louvain", "A* Algorithm"], "answer": "PageRank"},
+          {"question": "What algorithm identifies dense clusters and modular communities in a network?", "options": ["Louvain Community Detection", "Bellman-Ford", "K-Means", "Depth First Search"], "answer": "Louvain Community Detection"},
+          {"question": "What metric measures how often a node falls on the shortest path between all other pairs of nodes in the graph?", "options": ["Betweenness Centrality", "Degree Centrality", "Closeness Centrality", "Eigenvector Centrality"], "answer": "Betweenness Centrality"},
+          {"question": "Where does the Neo4j GDS library execute algorithms for ultra-high performance?", "options": ["In an in-memory projected graph catalog", "Directly on the disk store files", "Inside a remote MySQL cache", "On the client browser canvas"], "answer": "In an in-memory projected graph catalog"},
+          {"question": "Which GDS procedure projects a named subgraph into memory for analysis?", "options": ["gds.graph.project", "gds.graph.load", "gds.memory.create", "gds.catalog.add"], "answer": "gds.graph.project"},
+          {"question": "What execution mode writes the algorithm results directly back as properties on the graph nodes?", "options": ["write", "stream", "mutate", "stats"], "answer": "write"},
+          {"question": "What execution mode returns the results directly as rows in the Cypher query stream without altering the database?", "options": ["stream", "write", "mutate", "estimate"], "answer": "stream"},
+          {"question": "Which pathfinding algorithm finds the shortest path while accounting for weighted relationships?", "options": ["Dijkstra's Algorithm", "Breadth First Search", "Random Walk", "Louvain"], "answer": "Dijkstra's Algorithm"},
+          {"question": "What algorithm measures the similarity between pairs of nodes based on their shared neighborhood?", "options": ["Node Similarity / Jaccard", "PageRank", "K-Nearest Nodes", "Label Propagation"], "answer": "Node Similarity / Jaccard"},
+          {"question": "What procedure removes an in-memory graph projection to free up RAM when analysis concludes?", "options": ["gds.graph.drop", "gds.graph.delete", "gds.memory.clear", "gds.release.all"], "answer": "gds.graph.drop"}
+        ]
+      },
+      {
+        "chapter_number": 9,
+        "chapter_title": "Chapter 9: Query Tuning & Indexing Strategies",
+        "content": "Execution plan analysis using EXPLAIN and PROFILE. Understanding node label and relationship property indexes, memory buffers, and avoiding Eager operations.",
+        "quiz": [
+          {"question": "Which Cypher prefix displays the estimated query plan without actually executing the query?", "options": ["EXPLAIN", "PROFILE", "ANALYZE", "PLAN"], "answer": "EXPLAIN"},
+          {"question": "Which Cypher prefix executes the query and reports actual row counts, execution time, and DB hits?", "options": ["PROFILE", "EXPLAIN", "TRACK", "MEASURE"], "answer": "PROFILE"},
+          {"question": "What metric indicates the number of storage engine operations performed by a query operator?", "options": ["DbHits", "DiskReads", "PageFaults", "IoTicks"], "answer": "DbHits"},
+          {"question": "What operator in an execution plan represents an eager pipeline barrier that buffers all data before passing rows forward?", "options": ["Eager", "BufferBarrier", "BlockingFilter", "HoldAll"], "answer": "Eager"},
+          {"question": "Why can an Eager operator cause severe performance degradation during massive updates?", "options": ["It exhausts heap memory by holding all records simultaneously in RAM", "It forces disk formatting", "It drops relationship pointers", "It restarts the database service"], "answer": "It exhausts heap memory by holding all records simultaneously in RAM"},
+          {"question": "How do you create a point lookup index on the 'email' property of nodes with label 'User'?", "options": ["CREATE INDEX FOR (u:User) ON (u.email)", "INDEX ON :User(email)", "ADD INDEX (email) TO User", "MAKE INDEX User.email"], "answer": "CREATE INDEX FOR (u:User) ON (u.email)"},
+          {"question": "Does Neo4j support full-text search indexes on node properties?", "options": ["Yes, using CREATE FULLTEXT INDEX", "No, external Elasticsearch is always required", "Only on relationship properties", "Only in memory mode"], "answer": "Yes, using CREATE FULLTEXT INDEX"},
+          {"question": "What internal memory pool caches nodes, relationships, and property records from disk?", "options": ["Page Cache", "Heap Buffer", "Transaction Ring", "Query Scratchpad"], "answer": "Page Cache"},
+          {"question": "What occurs when the Page Cache is sized adequately to hold the entire graph store?", "options": ["Zero disk I/O occurs during traversals, leading to memory-speed lookups", "The CPU enters sleep mode", "Writes are disabled", "Indexes are deleted"], "answer": "Zero disk I/O occurs during traversals, leading to memory-speed lookups"},
+          {"question": "What command inspects all indexes currently active in the database?", "options": ["SHOW INDEXES", "LIST INDEXES", "CALL db.indexes()", "GET INDEXES"], "answer": "SHOW INDEXES"}
+        ]
+      },
+      {
+        "chapter_number": 10,
+        "chapter_title": "Chapter 10: High Availability, Clustering & Fabric Architecture",
+        "content": "Enterprise deployments. Raft-based Causal Clustering (Core and Read Replica roles), transaction logging, and sharding across multiple graphs using Neo4j Fabric.",
+        "quiz": [
+          {"question": "What consensus protocol does Neo4j Causal Clustering use to elect leaders and commit writes?", "options": ["Raft", "Paxos", "Zookeeper", "Two-Phase Commit"], "answer": "Raft"},
+          {"question": "Which cluster members participate in Raft consensus and accept write transactions?", "options": ["Core / Primary Servers", "Read Replicas", "Fabric Routers", "Arbiter Nodes"], "answer": "Core / Primary Servers"},
+          {"question": "What role do Read Replica instances play in a Neo4j cluster?", "options": ["Scale out read queries asynchronously without participating in consensus votes", "Process writes", "Manage cluster licenses", "Act as disk backup servers"], "answer": "Scale out read queries asynchronously without participating in consensus votes"},
+          {"question": "What feature allows querying and joining data across multiple distinct Neo4j databases in a single query?", "options": ["Neo4j Fabric", "Neo4j Bridge", "Graph CrossLink", "Cypher Federator"], "answer": "Neo4j Fabric"},
+          {"question": "What ensures that a client session reading immediately after a write sees its own update (causal consistency)?", "options": ["Bookmarks", "Locks", "Timeouts", "Polling"], "answer": "Bookmarks"},
+          {"question": "What protocol is used by official Neo4j drivers to communicate over binary sockets with the database?", "options": ["Bolt", "HTTP REST", "gRPC", "Thrift"], "answer": "Bolt"},
+          {"question": "What is the standard port for the Bolt binary protocol?", "options": ["7687", "7474", "27017", "6379"], "answer": "7687"},
+          {"question": "What is the standard HTTP port used by the Neo4j Browser web interface?", "options": ["7474", "7687", "8080", "5000"], "answer": "7474"},
+          {"question": "In a Raft cluster of 3 Core servers, what is the maximum number of failed servers tolerated while maintaining write availability?", "options": ["1 server", "2 servers", "0 servers", "3 servers"], "answer": "1 server"},
+          {"question": "What command displays the current active role and health of databases in a cluster?", "options": ["SHOW DATABASES", "CLUSTER STATUS", "CHECK HEALTH", "CALL dbms.cluster()"], "answer": "SHOW DATABASES"}
+        ]
+      }
+    ]
+  },
+  {
+    "title_keyword": "Redis In-Memory",
+    "course_title": "Redis In-Memory Caching & Data Structures",
+    "description": "Explore high-performance caching, key-value models, pub/sub messaging, and data types.",
+    "duration": "3 Weeks",
+    "chapters": [
+      {
+        "chapter_number": 1,
+        "chapter_title": "Chapter 1: In-Memory Architecture & Event Loop",
+        "content": "Single-threaded event loop mechanics, non-blocking multiplexed I/O, sub-millisecond latency guarantees, and memory footprints.",
+        "quiz": [
+          {"question": "What execution model does Redis use for request processing?", "options": ["Single-threaded event loop", "Multi-threaded process per connection", "Thread pool per query", "Actor model"], "answer": "Single-threaded event loop"},
+          {"question": "What multiplexing system call does Redis leverage on Linux for I/O?", "options": ["epoll", "kqueue", "select", "IOCP"], "answer": "epoll"},
+          {"question": "What is the typical read/write latency achieved by Redis for primitive commands?", "options": ["Sub-millisecond", "10-50 milliseconds", "100-200 milliseconds", "1-2 seconds"], "answer": "Sub-millisecond"},
+          {"question": "Which command checks whether a key exists in the current keyspace?", "options": ["EXISTS", "CHECK", "HAS", "FIND"], "answer": "EXISTS"},
+          {"question": "What is the maximum allowed size for a single Redis string value?", "options": ["512 MB", "16 MB", "64 MB", "1 GB"], "answer": "512 MB"},
+          {"question": "Which data type is implemented using a skip list and hash table in Redis?", "options": ["Sorted Set (ZSET)", "Hash", "List", "Stream"], "answer": "Sorted Set (ZSET)"},
+          {"question": "What command retrieves the time-to-live remaining on a volatile key?", "options": ["TTL", "EXPIRE_TIME", "REMAINING", "LIFETIME"], "answer": "TTL"},
+          {"question": "Which command flushes all keys from all databases in the Redis instance?", "options": ["FLUSHALL", "FLUSHDB", "CLEARALL", "DROP ALL"], "answer": "FLUSHALL"},
+          {"question": "What data type is ideal for implementing simple atomic counters in Redis?", "options": ["String", "Set", "Bitfield", "Hash"], "answer": "String"},
+          {"question": "What command atomically increments a numerical key value by 1?", "options": ["INCR", "ADD1", "PLUS", "STEP"], "answer": "INCR"}
+        ]
+      },
+      {
+        "chapter_number": 2,
+        "chapter_title": "Chapter 2: Primitive Data Structures & Manipulation",
+        "content": "Deep dive into Strings, Lists (LPUSH, RPOP), Hashes (HSET, HGETALL), Sets (SADD, SINTER), and Bitmaps.",
+        "quiz": [
+          {"question": "Which command inserts elements at the head of a Redis list?", "options": ["LPUSH", "RPUSH", "LINSERT", "PUSHFRONT"], "answer": "LPUSH"},
+          {"question": "Which command returns all field-value pairs stored within a Redis hash?", "options": ["HGETALL", "HALL", "HKEYS", "HSCAN"], "answer": "HGETALL"},
+          {"question": "What is the algorithmic time complexity of SADD when adding a member to a set?", "options": ["O(1)", "O(N)", "O(log N)", "O(N^2)"], "answer": "O(1)"},
+          {"question": "Which command computes the mathematical intersection of multiple sets?", "options": ["SINTER", "SUNION", "SDIFF", "SMERGE"], "answer": "SINTER"},
+          {"question": "What underlying data structure represents small Redis Lists efficiently in memory?", "options": ["Quicklist (listpack of ziplists)", "Balanced AVL tree", "Doubly linked raw pointer list", "B+ Tree"], "answer": "Quicklist (listpack of ziplists)"},
+          {"question": "Which command pops and returns an element from the tail of a list with blocking timeout support?", "options": ["BRPOP", "BLPOP", "RPOPWAIT", "BPOP"], "answer": "BRPOP"},
+          {"question": "What command modifies individual bits within a string for space-efficient bloom or flag tracking?", "options": ["SETBIT", "BITPUT", "BITMODIFY", "WRITEBIT"], "answer": "SETBIT"},
+          {"question": "How do you retrieve multiple string values in a single round-trip command?", "options": ["MGET", "GETMANY", "BULKGET", "MULTIGET"], "answer": "MGET"},
+          {"question": "Which command checks membership of a specific element inside a Set?", "options": ["SISMEMBER", "SEXISTS", "SHAS", "SCONTAINS"], "answer": "SISMEMBER"},
+          {"question": "What command increments a specific floating-point field inside a Hash?", "options": ["HINCRBYFLOAT", "HFLOATADD", "HINC", "HSTEP"], "answer": "HINCRBYFLOAT"}
+        ]
+      },
+      {
+        "chapter_number": 3,
+        "chapter_title": "Chapter 3: Persistence Strategies — RDB vs AOF",
+        "content": "Snapshotting with RDB, logging with Append-Only File (AOF), fsync policies (always, everysec, no), and background compaction rewrites.",
+        "quiz": [
+          {"question": "What does RDB stand for in Redis terminology?", "options": ["Redis Database Backup / Snapshot", "Relational Data Block", "Remote Disk Buffer", "Replicated Data Binary"], "answer": "Redis Database Backup / Snapshot"},
+          {"question": "Which system call does Redis invoke during BGSAVE to snapshot data without blocking main thread operations?", "options": ["fork()", "exec()", "mmap()", "clone()"], "answer": "fork()"},
+          {"question": "What does AOF stand for in Redis persistence?", "options": ["Append Only File", "Atomic Operations Format", "Asynchronous Output File", "Active Object Feed"], "answer": "Append Only File"},
+          {"question": "What is the recommended default fsync setting for AOF balancing durability and high throughput?", "options": ["appendfsync everysec", "appendfsync always", "appendfsync no", "appendfsync hourly"], "answer": "appendfsync everysec"},
+          {"question": "What background process optimizes and shrinks an overgrown AOF file?", "options": ["BGREWRITEAOF", "AOFCOMPACT", "TRUNCATEAOF", "FLUSHAOF"], "answer": "BGREWRITEAOF"},
+          {"question": "What operating system mechanism allows BGSAVE to snapshot memory without immediate RAM duplication?", "options": ["Copy-On-Write (COW)", "Page Swapping", "Demand Paging", "Virtual Memory Throttling"], "answer": "Copy-On-Write (COW)"},
+          {"question": "Which persistence mode provides the fastest restart times for large datasets?", "options": ["RDB snapshots", "AOF full replay", "Plaintext SQL dump", "JSON disk log"], "answer": "RDB snapshots"},
+          {"question": "What happens if both RDB and AOF are enabled upon Redis server startup?", "options": ["Redis loads the AOF file because it is guaranteed to be more complete", "Redis loads RDB first then crashes", "Redis rejects startup", "Redis merges both randomly"], "answer": "Redis loads the AOF file because it is guaranteed to be more complete"},
+          {"question": "What command forces a synchronous, blocking RDB snapshot to disk immediately?", "options": ["SAVE", "BGSAVE", "DUMP", "COMMIT"], "answer": "SAVE"},
+          {"question": "What setting prevents Redis from accepting writes if the latest background RDB save failed?", "options": ["stop-writes-on-bgsave-error yes", "halt-writes yes", "read-only-fallback true", "fail-safe active"], "answer": "stop-writes-on-bgsave-error yes"}
+        ]
+      },
+      {
+        "chapter_number": 4,
+        "chapter_title": "Chapter 4: Eviction Policies & Memory Management",
+        "content": "Maxmemory configuration, volatile vs allkeys strategies, LRU (Least Recently Used), LFU (Least Frequently Used), and memory fragmentation diagnostics.",
+        "quiz": [
+          {"question": "What parameter configures the maximum memory ceiling allocated to Redis?", "options": ["maxmemory", "memory_limit", "max_ram", "ram_ceiling"], "answer": "maxmemory"},
+          {"question": "What does the 'allkeys-lru' eviction policy do when memory is exhausted?", "options": ["Evicts the least recently used keys out of all keys", "Evicts only keys with an expire set using LRU", "Drops all keys randomly", "Rejects all incoming writes"], "answer": "Evicts the least recently used keys out of all keys"},
+          {"question": "What does the 'volatile-ttl' eviction policy target first?", "options": ["Keys with an expire set and the shortest time to live", "Keys with the longest TTL", "All keys regardless of TTL", "Oldest inserted keys"], "answer": "Keys with an expire set and the shortest time to live"},
+          {"question": "What does LFU stand for in eviction terminology?", "options": ["Least Frequently Used", "Least Fast Unit", "Lowest Frequency Unit", "Last First Used"], "answer": "Least Frequently Used"},
+          {"question": "What error occurs when memory is full under the default 'noeviction' policy and a write arrives?", "options": ["OOM command not allowed when used memory > maxmemory", "Segmentation fault", "KeyNotFound error", "Connection reset by peer"], "answer": "OOM command not allowed when used memory > maxmemory"},
+          {"question": "Which section of the `INFO` command outputs memory allocation statistics?", "options": ["INFO memory", "INFO ram", "INFO stats", "INFO allocation"], "answer": "INFO memory"},
+          {"question": "What metric measures the ratio of memory mapped by the OS compared to memory allocated by Redis?", "options": ["mem_fragmentation_ratio", "os_ram_drift", "allocation_skew", "page_bloat_score"], "answer": "mem_fragmentation_ratio"},
+          {"question": "How does Redis compute LRU internally without massive overhead?", "options": ["Approximated LRU sampling a random subset of keys", "Exact double linked list of millions of keys", "Operating system kernel hooks", "Periodic full RAM scans"], "answer": "Approximated LRU sampling a random subset of keys"},
+          {"question": "Which memory allocator is the standard compiled default in Redis on Linux?", "options": ["jemalloc", "glibc malloc", "tcmalloc", "hoard"], "answer": "jemalloc"},
+          {"question": "What feature enables automated background defragmentation in memory?", "options": ["activedefrag yes", "auto_compact on", "memory_heal true", "defrag_daemon enable"], "answer": "activedefrag yes"}
+        ]
+      },
+      {
+        "chapter_number": 5,
+        "chapter_title": "Chapter 5: Pub/Sub & Redis Streams",
+        "content": "Publish/Subscribe messaging architectures, pattern subscriptions (PSUBSCRIBE), append-only Streams (XADD), consumer groups (XREADGROUP), and message acknowledgment (XACK).",
+        "quiz": [
+          {"question": "Which command broadcasts a message to a named channel in Redis Pub/Sub?", "options": ["PUBLISH", "SEND", "BROADCAST", "EMIT"], "answer": "PUBLISH"},
+          {"question": "Which command subscribes a client to multiple channels matching a wildcard pattern?", "options": ["PSUBSCRIBE", "SUBPATTERN", "SCAN_SUB", "MATCHSUB"], "answer": "PSUBSCRIBE"},
+          {"question": "Are messages in traditional Redis Pub/Sub stored persistently if no consumers are listening?", "options": ["No, fire-and-forget; unread messages are lost", "Yes, stored for 24 hours in RAM", "Yes, backed up to AOF automatically", "Stored until the server restarts"], "answer": "No, fire-and-forget; unread messages are lost"},
+          {"question": "What data structure introduced in Redis 5.0 provides persistent streaming with consumer groups?", "options": ["Redis Streams", "Redis Queues", "Redis Channels", "Redis Topics"], "answer": "Redis Streams"},
+          {"question": "Which command appends a new entry to a Redis Stream?", "options": ["XADD", "STREAM_APPEND", "XPUSH", "SINSERT"], "answer": "XADD"},
+          {"question": "What character generates an automatic millisecond timestamp ID when executing XADD?", "options": ["*", "$", "#", "!"], "answer": "*"},
+          {"question": "Which command reads messages from a stream using a managed Consumer Group?", "options": ["XREADGROUP", "GROUPREAD", "XFETCH", "CONSUME"], "answer": "XREADGROUP"},
+          {"question": "How does a consumer acknowledge that a stream message has been successfully processed?", "options": ["XACK", "XCONFIRM", "XDONE", "XCOMMIT"], "answer": "XACK"},
+          {"question": "What structure in Redis Streams stores unacknowledged messages assigned to a consumer?", "options": ["PEL (Pending Entries List)", "Unack Table", "Dead Letter Buffer", "Holding Queue"], "answer": "PEL (Pending Entries List)"},
+          {"question": "Which command inspects consumer group health and pending messages?", "options": ["XPENDING", "XINSPECT", "XSTATUS", "XGROUP_CHECK"], "answer": "XPENDING"}
+        ]
+      },
+      {
+        "chapter_number": 6,
+        "chapter_title": "Chapter 6: Transactions & Atomic Lua Scripting",
+        "content": "Sequential transaction blocks using MULTI/EXEC, optimistic concurrency control with WATCH, and server-side atomic script evaluation via Lua.",
+        "quiz": [
+          {"question": "Which command initializes a transaction block in Redis?", "options": ["MULTI", "BEGIN", "START TRANSACTION", "INIT"], "answer": "MULTI"},
+          {"question": "Which command commits and executes all queued commands in a transaction block?", "options": ["EXEC", "COMMIT", "RUN", "FLUSH"], "answer": "EXEC"},
+          {"question": "Which command provides optimistic locking by monitoring keys for external modifications prior to execution?", "options": ["WATCH", "LOCK", "MONITOR", "HOLD"], "answer": "WATCH"},
+          {"question": "What happens to an EXEC command if a WATCHed key is updated by another client before commit?", "options": ["EXEC aborts and returns nil", "EXEC raises a fatal crash", "The other client's write is rolled back", "Redis retries 5 times automatically"], "answer": "EXEC aborts and returns nil"},
+          {"question": "Does Redis support rollbacks for runtime command errors inside a MULTI block?", "options": ["No, remaining commands execute regardless of syntax/runtime errors on valid syntax", "Yes, strict relational-style rollback occurs", "Only if configured with AOF", "Only in cluster mode"], "answer": "No, remaining commands execute regardless of syntax/runtime errors on valid syntax"},
+          {"question": "Which scripting language is natively embedded inside Redis for atomic server-side execution?", "options": ["Lua", "Python", "JavaScript", "Rust"], "answer": "Lua"},
+          {"question": "Which command executes a Lua script on the Redis server?", "options": ["EVAL", "RUN_SCRIPT", "EXEC_LUA", "CALL"], "answer": "EVAL"},
+          {"question": "Why is Lua script execution considered completely atomic in Redis?", "options": ["Redis executes Lua scripts without interleaving other commands on the event loop", "Lua locks the physical hard drive", "Lua runs in a separate thread", "Lua compiles to C code"], "answer": "Redis executes Lua scripts without interleaving other commands on the event loop"},
+          {"question": "Which command loads a Lua script into the server script cache to execute later via SHA1 hash?", "options": ["SCRIPT LOAD", "CACHE SCRIPT", "PREPARE SCRIPT", "COMPILE"], "answer": "SCRIPT LOAD"},
+          {"question": "Which command invokes a cached script using its SHA1 digest to save network bandwidth?", "options": ["EVALSHA", "CALLSHA", "EXEC_CACHED", "SHARUN"], "answer": "EVALSHA"}
+        ]
+      },
+      {
+        "chapter_number": 7,
+        "chapter_title": "Chapter 7: Redis Sentinel — High Availability & Failover",
+        "content": "Master-replica asynchronous replication, Sentinel quorum configuration, heartbeats (PING), and automated failover promotion.",
+        "quiz": [
+          {"question": "What distributed monitoring system provides automated failover for standalone Redis instances?", "options": ["Redis Sentinel", "Redis Cluster", "Redis Keepalived", "Redis Watchdog"], "answer": "Redis Sentinel"},
+          {"question": "How do replica nodes synchronize data asynchronously from the master?", "options": ["Replication stream via PSYNC command", "Manual periodic rsync cron job", "Shared disk access over NFS", "SSH port forwarding"], "answer": "Replication stream via PSYNC command"},
+          {"question": "What does a Sentinel node emit when it detects that a master is unresponsive locally?", "options": ["+sdown (Subjectively Down)", "+odown (Objectively Down)", "+crash", "+failover_start"], "answer": "+sdown (Subjectively Down)"},
+          {"question": "When does a master state transition from SDOWN to ODOWN in Sentinel?", "options": ["When a configured quorum of Sentinels agree the master is unreachable", "After 24 hours of silence", "When the OS kernel restarts", "Immediately upon first ping failure"], "answer": "When a configured quorum of Sentinels agree the master is unreachable"},
+          {"question": "What protocol do Sentinel instances use to communicate and discover peers?", "options": ["Pub/Sub on the __sentinel__:hello channel", "Raft consensus socket", "BGP routing tables", "HTTP REST webhooks"], "answer": "Pub/Sub on the __sentinel__:hello channel"},
+          {"question": "What minimum number of Sentinel instances is recommended in production to prevent split-brain?", "options": ["3", "1", "2", "4"], "answer": "3"},
+          {"question": "What parameter specifies how many milliseconds a master must be unreachable before declaring SDOWN?", "options": ["down-after-milliseconds", "heartbeat_timeout", "ping_grace_period", "fail_latency"], "answer": "down-after-milliseconds"},
+          {"question": "During failover, which replica is chosen for master promotion?", "options": ["The replica with the highest replication offset (most up-to-date data)", "The replica with lowest IP address", "The replica using least RAM", "A randomly selected replica"], "answer": "The replica with the highest replication offset (most up-to-date data)"},
+          {"question": "What role does Sentinel play for connecting client applications?", "options": ["Configuration provider directing clients to current master IP", "Reverse proxy load balancer routing bytes", "Inverted index router", "TLS terminating gateway"], "answer": "Configuration provider directing clients to current master IP"},
+          {"question": "Can a Redis Sentinel cluster accept standard data write commands like SET or HSET?", "options": ["No, Sentinels manage health and metadata only", "Yes, Sentinels double as cache nodes", "Only when master is offline", "Only if cluster mode is active"], "answer": "No, Sentinels manage health and metadata only"}
+        ]
+      },
+      {
+        "chapter_number": 8,
+        "chapter_title": "Chapter 8: Redis Cluster — Sharding & Hash Slots",
+        "content": "Horizontal partitioning across nodes, 16384 hash slots, CRC16 hashing, MOVED vs ASK client redirections, and cross-slot multi-key operations.",
+        "quiz": [
+          {"question": "How many total fixed hash slots exist across a Redis Cluster?", "options": ["16384", "1024", "4096", "65536"], "answer": "16384"},
+          {"question": "Which hashing algorithm maps keys to hash slots in Redis Cluster?", "options": ["CRC16", "MD5", "Murmur3", "SHA256"], "answer": "CRC16"},
+          {"question": "How can you force multiple related keys to land in the exact same hash slot for multi-key queries?", "options": ["Hash tags using curly braces {user100}:profile", "Prefixing keys with double slashes", "Using a composite key separator", "Cluster pinning flag"], "answer": "Hash tags using curly braces {user100}:profile"},
+          {"question": "What error response does a Redis node return when a query targets a key hosted on a different node permanently?", "options": ["MOVED <slot> <ip:port>", "ASK <slot> <ip:port>", "WRONG_NODE", "SLOT_NOT_FOUND"], "answer": "MOVED <slot> <ip:port>"},
+          {"question": "What error response indicates that a targeted hash slot is currently in the middle of live migration?", "options": ["ASK <slot> <ip:port>", "MOVED <slot> <ip:port>", "MIGRATING_ERROR", "RETRY_LATER"], "answer": "ASK <slot> <ip:port>"},
+          {"question": "What command must a client issue prior to querying a node following an ASK redirection?", "options": ["ASKING", "CLUSTER REDIRECT", "FORCE_QUERY", "SLOT_ACK"], "answer": "ASKING"},
+          {"question": "What protocol do Redis Cluster nodes use to exchange heartbeat messages and node statuses?", "options": ["Gossip Protocol over cluster bus port (+10000)", "HTTP/2 REST API", "BGP mesh", "Raw UDP ping"], "answer": "Gossip Protocol over cluster bus port (+10000)"},
+          {"question": "What is the standard port offset for the cluster bus communication channel?", "options": ["Base port + 10000 (e.g., 16379)", "Base port + 1000", "Base port + 500", "Dedicated port 8888"], "answer": "Base port + 10000 (e.g., 16379)"},
+          {"question": "What command inspects the slot distribution and node layout in Redis Cluster?", "options": ["CLUSTER SLOTS / CLUSTER SHARDS", "CLUSTER MAP", "SHOW SLOTS", "INFO cluster_map"], "answer": "CLUSTER SLOTS / CLUSTER SHARDS"},
+          {"question": "What happens if a master and all its replicas in a specific hash slot fail simultaneously?", "options": ["The cluster state enters fail and write operations to missing slots halt", "The entire dataset is wiped", "Keys automatically remap to slot 0", "Clients redirect to local disk"], "answer": "The cluster state enters fail and write operations to missing slots halt"}
+        ]
+      },
+      {
+        "chapter_number": 9,
+        "chapter_title": "Chapter 9: Redis Modules — RedisJSON & RediSearch",
+        "content": "Extending Redis capabilities via dynamic C modules. JSON document storage (JSON.SET), secondary query indexing, full-text search, and vector similarity retrieval.",
+        "quiz": [
+          {"question": "Which module allows storing, querying, and updating structured hierarchical JSON documents in Redis?", "options": ["RedisJSON", "RediSearch", "RedisGraph", "RedisBloom"], "answer": "RedisJSON"},
+          {"question": "Which command sets or updates a JSON document field at a specific JSONPath in RedisJSON?", "options": ["JSON.SET", "JSET", "JSON.PUT", "JSON.UPDATE"], "answer": "JSON.SET"},
+          {"question": "What root path identifier represents the top of the document in JSONPath syntax?", "options": ["$", "/", "#", "root"], "answer": "$"},
+          {"question": "Which module provides high-speed secondary indexing, full-text search, and vector search over Redis hashes and JSON?", "options": ["RediSearch", "RedisBloom", "RedisAI", "RedisTimeseries"], "answer": "RediSearch"},
+          {"question": "What command creates a secondary index over JSON documents in RediSearch?", "options": ["FT.CREATE", "INDEX.ADD", "FT.INDEX_MAKE", "SEARCH.BUILD"], "answer": "FT.CREATE"},
+          {"question": "Which command executes a text query against a RediSearch index?", "options": ["FT.SEARCH", "SEARCH.QUERY", "FT.FIND", "QUERY.EXEC"], "answer": "FT.SEARCH"},
+          {"question": "What module provides space-efficient probabilistic data structures like Bloom Filters and Cuckoo Filters?", "options": ["RedisBloom", "RedisMath", "RedisProb", "RedisCrypto"], "answer": "RedisBloom"},
+          {"question": "What is the primary operational benefit of using a Bloom Filter before checking a database?", "options": ["Guarantees 0% false negatives to avoid unnecessary expensive disk queries", "Encrypts query payloads", "Compresses RAM by 90%", "Enforces relational constraints"], "answer": "Guarantees 0% false negatives to avoid unnecessary expensive disk queries"},
+          {"question": "How are external modules compiled and loaded into Redis?", "options": ["As shared dynamic libraries (.so files) loaded via `loadmodule` directive", "As Python script plugins", "Directly into Linux kernel", "As webassembly client wrappers"], "answer": "As shared dynamic libraries (.so files) loaded via `loadmodule` directive"},
+          {"question": "Can RediSearch perform vector search for generative AI and LLM embeddings?", "options": ["Yes, supporting HNSW and Flat vector indexing algorithms", "No, vector indexing requires external tools", "Only with 1-dimensional numbers", "Only in memory-disabled mode"], "answer": "Yes, supporting HNSW and Flat vector indexing algorithms"}
+        ]
+      },
+      {
+        "chapter_number": 10,
+        "chapter_title": "Chapter 10: Production Security, ACLs & Performance Benchmarking",
+        "content": "Hardening Redis instances with Access Control Lists (ACLs), TLS encryption, disabling dangerous commands (CONFIG, FLUSHALL), and latency benchmarking with redis-benchmark.",
+        "quiz": [
+          {"question": "What feature introduced in Redis 6.0 provides granular user authorization and permissions?", "options": ["ACL (Access Control Lists)", "RBAC Enterprise", "UserTable", "PAM Module"], "answer": "ACL (Access Control Lists)"},
+          {"question": "Which command lists all configured ACL users and their specific permissions?", "options": ["ACL LIST", "USER SHOW", "ACL USERS", "GET ACCESS"], "answer": "ACL LIST"},
+          {"question": "How do you rename or disable a dangerous command like `FLUSHALL` in the configuration file?", "options": ["rename-command FLUSHALL \"\"", "disable FLUSHALL", "drop-cmd FLUSHALL", "command-block FLUSHALL"], "answer": "rename-command FLUSHALL \"\""},
+          {"question": "What native command-line utility tests throughput and latency under concurrent connection loads?", "options": ["redis-benchmark", "redis-stress", "redis-load", "perf-redis"], "answer": "redis-benchmark"},
+          {"question": "What command diagnoses latency spikes and slow-running operations above a configured microsecond threshold?", "options": ["SLOWLOG GET", "LATENCY DUMP", "LOG INSPECT", "PERF MONITOR"], "answer": "SLOWLOG GET"},
+          {"question": "By default, does Redis bind to all network interfaces or loopback only on initial fresh setup?", "options": ["Loopback interface 127.0.0.1 with protected-mode enabled", "0.0.0.0 public interface without passwords", "Dedicated eth1 bridge", "Unix socket only"], "answer": "Loopback interface 127.0.0.1 with protected-mode enabled"},
+          {"question": "What protocol secures in-transit traffic between Redis clients and nodes?", "options": ["TLS (Transport Layer Security)", "SSH port redirection", "BSON-Crypt", "PGP Tunneling"], "answer": "TLS (Transport Layer Security)"},
+          {"question": "Which command monitors incoming commands in real-time but degrades throughput severely in production?", "options": ["MONITOR", "WATCH_ALL", "TRACE", "SPY"], "answer": "MONITOR"},
+          {"question": "What system parameter in `/proc/sys/vm/overcommit_memory` should be set to 1 for reliable Redis background saves?", "options": ["vm.overcommit_memory = 1", "vm.overcommit_memory = 0", "vm.overcommit_memory = 2", "sys.ram.allow = true"], "answer": "vm.overcommit_memory = 1"},
+          {"question": "What command provides atomic server clock and system diagnostics for runtime heartbeat tracking?", "options": ["TIME", "CLOCK", "SYSINFO", "NOW"], "answer": "TIME"}
+        ]
+      }
+    ]
+  },
+  {
+    "title_keyword": "Cassandra",
+    "course_title": "Apache Cassandra Wide-Column Architecture",
+    "description": "Understand distributed decentralized ring architecture, CQL, and partition key design.",
+    "duration": "4 Weeks",
+    "chapters": [
+      {
+        "chapter_number": 1,
+        "chapter_title": "Chapter 1: Masterless Peer-to-Peer Ring Architecture",
+        "content": "Decentralized architecture. Gossip protocol cluster health synchronization, zero single points of failure, ring topologies, and snitches.",
+        "quiz": [
+          {"question": "What architectural topology does Apache Cassandra utilize for cluster organization?", "options": ["Masterless peer-to-peer ring", "Master-slave tree", "Leader-follower star", "Centralized coordinator bus"], "answer": "Masterless peer-to-peer ring"},
+          {"question": "Which protocol do Cassandra nodes use to exchange state, cluster membership, and node health?", "options": ["Gossip Protocol", "Raft", "Paxos", "Zookeeper"], "answer": "Gossip Protocol"},
+          {"question": "In Cassandra, does any individual node act as a single point of failure (SPOF)?", "options": ["No, all nodes are peers with identical responsibilities", "Yes, the primary seed node", "Yes, the leader coordinator", "Yes, the snitch node"], "answer": "No, all nodes are peers with identical responsibilities"},
+          {"question": "What component maps IP addresses to physical racks and datacenters?", "options": ["Snitch", "Partitioner", "Compactor", "CommitLog"], "answer": "Snitch"},
+          {"question": "What role does a node play when receiving a query from a client application?", "options": ["Coordinator node", "Master authority", "Storage proxy slave", "Router daemon"], "answer": "Coordinator node"},
+          {"question": "Can any node in a Cassandra cluster act as a query coordinator?", "options": ["Yes, any node contacted by the client coordinates the query", "No, only seed nodes coordinate", "Only nodes with lowest token ID", "Only nodes running Linux"], "answer": "Yes, any node contacted by the client coordinates the query"},
+          {"question": "What nodes are used during cluster bootstrapping to allow joining nodes to discover the ring?", "options": ["Seed Nodes", "Master Nodes", "Anchor Nodes", "Root Gateways"], "answer": "Seed Nodes"},
+          {"question": "How often does a Cassandra node gossip with random peers across the cluster?", "options": ["Every 1 second", "Every 100 milliseconds", "Every 30 seconds", "Every 5 minutes"], "answer": "Every 1 second"},
+          {"question": "What algorithm calculates failure probabilities based on historical gossip arrival intervals?", "options": ["Phi Accural Failure Detector", "Heartbeat Timeout Counter", "TCP Retransmission Metric", "Ping-Ack Threshold"], "answer": "Phi Accural Failure Detector"},
+          {"question": "What database category does Cassandra belong to?", "options": ["Wide-Column / Partitioned Row Store", "Document Store", "Graph Database", "Pure In-Memory Cache"], "answer": "Wide-Column / Partitioned Row Store"}
+        ]
+      },
+      {
+        "chapter_number": 2,
+        "chapter_title": "Chapter 2: Partitioning & Consistent Hashing",
+        "content": "Murmur3Partitioner token allocation, consistent hashing ring, virtual nodes (vnodes), and data distribution balancing.",
+        "quiz": [
+          {"question": "What is the default partitioner used in modern Cassandra clusters?", "options": ["Murmur3Partitioner", "RandomPartitioner", "ByteOrderedPartitioner", "MD5Partitioner"], "answer": "Murmur3Partitioner"},
+          {"question": "What is the numerical range of token values generated by Murmur3Partitioner?", "options": ["-2^63 to 2^63 - 1", "0 to 16384", "0 to 2^32 - 1", "-1000 to 1000"], "answer": "-2^63 to 2^63 - 1"},
+          {"question": "What architectural feature assigns multiple small token slices across the ring to each physical server?", "options": ["Virtual Nodes (vnodes)", "Logical Partitioners", "Sub-Shards", "Hash Buckets"], "answer": "Virtual Nodes (vnodes)"},
+          {"question": "What is the primary benefit of virtual nodes (vnodes) when a new server joins the cluster?", "options": ["Data rebuild is streamed uniformly from all existing nodes rather than one neighbor", "Disables disk compaction", "Reduces RAM consumption to zero", "Eliminates the need for commit logs"], "answer": "Data rebuild is streamed uniformly from all existing nodes rather than one neighbor"},
+          {"question": "Which part of a Cassandra primary key determines the physical node where data resides?", "options": ["Partition Key", "Clustering Column", "Secondary Index", "Sort Key"], "answer": "Partition Key"},
+          {"question": "What happens if you use ByteOrderedPartitioner in production?", "options": ["Uneven data distribution and cluster hot-spotting occur frequently", "Tokens hash uniformly across all servers", "Writes run 10x faster", "Nodes refuse to start"], "answer": "Uneven data distribution and cluster hot-spotting occur frequently"},
+          {"question": "How does consistent hashing ensure high availability when a node fails?", "options": ["Tokens and data ranges are replicated to clockwise downstream neighbors", "The entire ring shifts counter-clockwise", "Data is dumped to CSV files", "The client node crashes"], "answer": "Tokens and data ranges are replicated to clockwise downstream neighbors"},
+          {"question": "What parameter in `cassandra.yaml` configures the number of vnodes per machine (commonly 128 or 8)?", "options": ["num_tokens", "virtual_nodes_count", "token_slices", "vnodes_active"], "answer": "num_tokens"},
+          {"question": "Can two rows with identical partition keys be placed onto different physical servers in Cassandra?", "options": ["No, identical partition keys hash to the same token and replica set", "Yes, they distribute randomly", "Only if clustering columns differ", "Only in multi-DC clusters"], "answer": "No, identical partition keys hash to the same token and replica set"},
+          {"question": "What command inspects the token ring distribution and replica ownership percentages?", "options": ["nodetool status / nodetool ring", "cqlsh SHOW RING", "nodetool cluster_map", "DESCRIBE RING"], "answer": "nodetool status / nodetool ring"}
+        ]
+      },
+      {
+        "chapter_number": 3,
+        "chapter_title": "Chapter 3: Write Path Internals — CommitLog to SSTable",
+        "content": "Sequential write mechanics. CommitLog append, in-memory Memtable, immutable SSTables, and Bloom filters for zero-seek writes.",
+        "quiz": [
+          {"question": "Where is an incoming write persisted immediately to disk to guarantee durability?", "options": ["CommitLog", "SSTable data file", "Bloom Filter file", "Key Cache"], "answer": "CommitLog"},
+          {"question": "Where is an incoming write stored simultaneously in RAM before being flushed to disk?", "options": ["Memtable", "Row Cache", "Buffer Pool", "SSTable Buffer"], "answer": "Memtable"},
+          {"question": "Why are writes exceptionally fast in Cassandra compared to traditional relational databases?", "options": ["Writes are purely sequential append operations requiring zero random disk seeks", "Cassandra writes to RAM only without disk durability", "Cassandra skips all indexing", "Writes use single-threaded locks"], "answer": "Writes are purely sequential append operations requiring zero random disk seeks"},
+          {"question": "What on-disk immutable file format stores flushed Memtable data?", "options": ["SSTable (Sorted String Table)", "HFile", "WAL file", "Parquet Table"], "answer": "SSTable (Sorted String Table)"},
+          {"question": "Can an existing SSTable file on disk be modified or updated in place?", "options": ["No, SSTables are strictly immutable; updates create new SSTables", "Yes, via in-place disk blocks", "Only during major compaction", "Only if smaller than 64MB"], "answer": "No, SSTables are strictly immutable; updates create new SSTables"},
+          {"question": "What probabilistic data structure tests whether an SSTable definitely does NOT contain a requested partition?", "options": ["Bloom Filter", "Skip List", "B+ Tree", "Cuckoo Hash"], "answer": "Bloom Filter"},
+          {"question": "What in-memory index structure maps partition keys to specific file byte offsets within an SSTable?", "options": ["Partition Index / Partition Summary", "B-Tree Master", "Offset Hash Map", "Seek Registry"], "answer": "Partition Index / Partition Summary"},
+          {"question": "When does Cassandra delete or recycle an on-disk CommitLog segment?", "options": ["When all Memtable data corresponding to that segment has successfully flushed to SSTables", "Immediately after write ack", "Every 24 hours", "Only upon server shutdown"], "answer": "When all Memtable data corresponding to that segment has successfully flushed to SSTables"},
+          {"question": "What command forces all in-memory Memtables to flush immediately to SSTable disk files?", "options": ["nodetool flush", "cqlsh FLUSH", "nodetool commit", "SYNC DISK"], "answer": "nodetool flush"},
+          {"question": "What data structure does Cassandra use to keep Memtable rows sorted in memory?", "options": ["SkipList / ConcurrentSkipListMap", "Binary Max-Heap", "Unsorted Array", "Red-Black Tree with global lock"], "answer": "SkipList / ConcurrentSkipListMap"}
+        ]
+      },
+      {
+        "chapter_number": 4,
+        "chapter_title": "Chapter 4: Read Path Internals & Speculative Retry",
+        "content": "Multi-tier read reconciliation. Row cache, Key cache, Bloom filter check, Partition summary seek, and background Read Repair.",
+        "quiz": [
+          {"question": "In what order does Cassandra check memory caches during a read query?", "options": ["Row Cache -> Key Cache -> Bloom Filter -> Partition Summary", "Bloom Filter -> CommitLog -> Memtable", "SSTable -> Row Cache -> RAM", "CommitLog -> Disk Index"], "answer": "Row Cache -> Key Cache -> Bloom Filter -> Partition Summary"},
+          {"question": "Why does a read query need to check both Memtables and multiple SSTables simultaneously?", "options": ["Because a row might have different column updates spread across memory and multiple immutable SSTables", "Because data is encrypted across disks", "Because CommitLogs store reads", "Because replication requires it"], "answer": "Because a row might have different column updates spread across memory and multiple immutable SSTables"},
+          {"question": "How does Cassandra resolve conflicts when multiple SSTables return different values for the same cell?", "options": ["Last-Write-Wins based on cell timestamps", "First-inserted value wins", "Coordinator picks the smallest value", "Alphabetical column order"], "answer": "Last-Write-Wins based on cell timestamps"},
+          {"question": "What process updates out-of-sync replicas asynchronously when a data inconsistency is detected during a read?", "options": ["Read Repair", "Gossip Repair", "Write Patch", "Sync Daemon"], "answer": "Read Repair"},
+          {"question": "What optimization sends a parallel read request to another replica if the initial replica does not respond within a percentile threshold?", "options": ["Speculative Retry", "Double Dispatch", "Forking Query", "Asynchronous Burst"], "answer": "Speculative Retry"},
+          {"question": "What in-memory cache stores fully rendered row result sets in off-heap memory?", "options": ["Row Cache", "Key Cache", "Chunk Cache", "Query Pool"], "answer": "Row Cache"},
+          {"question": "What in-memory cache stores exact byte offsets of partition keys inside SSTables?", "options": ["Key Cache", "Row Cache", "Page Buffer", "Seek Cache"], "answer": "Key Cache"},
+          {"question": "Why is the Cassandra read path typically slower than the write path?", "options": ["Reads must reconcile data across Memtables, caches, and multiple SSTables on disk", "Reads require distributed locks", "Reads format data into SQL", "Reads run on a single thread"], "answer": "Reads must reconcile data across Memtables, caches, and multiple SSTables on disk"},
+          {"question": "What command inspects cache hit ratios and capacity usage in Cassandra?", "options": ["nodetool info / nodetool tablestats", "cqlsh DESCRIBE CACHE", "nodetool show_cache", "CACHE STATS"], "answer": "nodetool info / nodetool tablestats"},
+          {"question": "What happens if a Bloom filter returns false during a read search?", "options": ["Cassandra bypasses reading that SSTable entirely, saving disk I/O", "Cassandra reads the entire disk file", "Cassandra raises an exception", "Cassandra queries the CommitLog"], "answer": "Cassandra bypasses reading that SSTable entirely, saving disk I/O"}
+        ]
+      },
+      {
+        "chapter_number": 5,
+        "chapter_title": "Chapter 5: SSTable Compaction Strategies",
+        "content": "Compaction algorithms: SizeTieredCompactionStrategy (STCS), LeveledCompactionStrategy (LCS), and TimeWindowCompactionStrategy (TWCS).",
+        "quiz": [
+          {"question": "What background process merges multiple immutable SSTables into a single consolidated SSTable?", "options": ["Compaction", "Aggregation", "Defragmentation", "Garbage Collection"], "answer": "Compaction"},
+          {"question": "Which compaction strategy is best suited for write-heavy workloads with similar file sizes?", "options": ["SizeTieredCompactionStrategy (STCS)", "LeveledCompactionStrategy (LCS)", "TimeWindowCompactionStrategy (TWCS)", "FIFOCompactionStrategy"], "answer": "SizeTieredCompactionStrategy (STCS)"},
+          {"question": "Which compaction strategy optimizes read latency by organizing SSTables into fixed-size generational tiers with 90% single-SSTable reads?", "options": ["LeveledCompactionStrategy (LCS)", "SizeTieredCompactionStrategy (STCS)", "DateTieredCompactionStrategy", "RandomCompaction"], "answer": "LeveledCompactionStrategy (LCS)"},
+          {"question": "Which compaction strategy is recommended for time-series and append-only timestamped data with fixed retention TTLs?", "options": ["TimeWindowCompactionStrategy (TWCS)", "LeveledCompactionStrategy (LCS)", "SizeTieredCompactionStrategy (STCS)", "DynamicCompactionStrategy"], "answer": "TimeWindowCompactionStrategy (TWCS)"},
+          {"question": "What is a major disk space drawback of SizeTieredCompactionStrategy (STCS)?", "options": ["It may require up to 50% free disk space to complete compaction of large files", "It deletes active keys", "It disables write operations during compaction", "It restricts SSTable size to 1MB"], "answer": "It may require up to 50% free disk space to complete compaction of large files"},
+          {"question": "What happens to expired tombstone markers during a major compaction?", "options": ["They are permanently purged if older than gc_grace_seconds", "They remain forever", "They are written back to the CommitLog", "They convert into empty strings"], "answer": "They are permanently purged if older than gc_grace_seconds"},
+          {"question": "What command triggers manual compaction across tables in Cassandra?", "options": ["nodetool compact", "cqlsh COMPACT", "nodetool merge", "COMPACT ALL"], "answer": "nodetool compact"},
+          {"question": "What disk space overhead does LeveledCompactionStrategy (LCS) typically require for compaction buffers?", "options": ["Around 10% free disk space", "50% free disk space", "100% free disk space", "Zero disk space"], "answer": "Around 10% free disk space"},
+          {"question": "How large is an individual SSTable chunk typically maintained in Level 1 of LCS?", "options": ["160 MB", "10 GB", "1 MB", "5 GB"], "answer": "160 MB"},
+          {"question": "What performance penalty occurs when compaction falls severely behind high-speed writes?", "options": ["Compaction backlog causes elevated read latency and SSTable bloat", "The server automatically turns off", "Writes are deleted from Memtables", "CommitLogs corrupt"], "answer": "Compaction backlog causes elevated read latency and SSTable bloat"}
+        ]
+      },
+      {
+        "chapter_number": 6,
+        "chapter_title": "Chapter 6: CQL Modeling — Primary Keys & Clustering Columns",
+        "content": "Query-first data modeling. Partition key vs Clustering columns, compound primary keys, ascending/descending ordering, and avoiding ALLOW FILTERING.",
+        "quiz": [
+          {"question": "In Cassandra query-driven modeling, what drives table schema design?", "options": ["Specific application query access patterns rather than entity relationships", "3rd Normal Form rules", "Foreign key constraint chains", "Minimizing total table count"], "answer": "Specific application query access patterns rather than entity relationships"},
+          {"question": "In the compound primary key `PRIMARY KEY ((user_id), created_at)`, what is `user_id`?", "options": ["Partition Key", "Clustering Column", "Secondary Index", "Foreign Pointer"], "answer": "Partition Key"},
+          {"question": "In the compound primary key `PRIMARY KEY ((user_id), created_at)`, what is `created_at`?", "options": ["Clustering Column", "Partition Key", "Partition Salt", "Index Value"], "answer": "Clustering Column"},
+          {"question": "What role do clustering columns play inside a partition on disk?", "options": ["They determine the physical sort order of rows within that partition", "They determine which server node stores the data", "They encrypt column values", "They trigger automated rollbacks"], "answer": "They determine the physical sort order of rows within that partition"},
+          {"question": "In the composite partition key `PRIMARY KEY ((country, state), city, user_id)`, what determines the data placement token?", "options": ["The combination of both country and state", "Only country", "city and user_id", "user_id only"], "answer": "The combination of both country and state"},
+          {"question": "Why is using `ALLOW FILTERING` heavily discouraged on large production tables in CQL?", "options": ["It forces an unpredictable, multi-node distributed full partition scan", "It deletes non-matching rows", "It turns off replication", "It converts queries into SQL"], "answer": "It forces an unpredictable, multi-node distributed full partition scan"},
+          {"question": "How do you specify reverse chronological sorting for rows within a partition upon table creation?", "options": ["WITH CLUSTERING ORDER BY (created_at DESC)", "ORDER BY created_at DESC in SELECT", "SORT DESC on partition", "REVERSE = true"], "answer": "WITH CLUSTERING ORDER BY (created_at DESC)"},
+          {"question": "Can you execute a `JOIN` statement across multiple tables in Cassandra Query Language (CQL)?", "options": ["No, joins are not supported; data must be denormalized", "Yes, using CQL INNER JOIN", "Only on tables with identical keys", "Only in multi-DC setups"], "answer": "No, joins are not supported; data must be denormalized"},
+          {"question": "What is the recommended upper threshold for the size of a single partition on disk?", "options": ["100 MB (under 100,000 rows)", "10 GB", "1 MB", "500 GB"], "answer": "100 MB (under 100,000 rows)"},
+          {"question": "What command-line shell is used to run CQL queries directly against Cassandra?", "options": ["cqlsh", "cass-cli", "cql-terminal", "nodetool query"], "answer": "cqlsh"}
+        ]
+      },
+      {
+        "chapter_number": 7,
+        "chapter_title": "Chapter 7: Tunable Consistency & CAP Theorem",
+        "content": "Replication factor (RF), consistency levels (ONE, QUORUM, LOCAL_QUORUM, ALL), calculating strong consistency (R + W > N), and latency trade-offs.",
+        "quiz": [
+          {"question": "What configuration setting dictates the total number of replica copies stored for a keyspace?", "options": ["Replication Factor (RF)", "Quorum Ratio", "Copy Multiplier", "Redundancy Index"], "answer": "Replication Factor (RF)"},
+          {"question": "What formula ensures strong consistency (Linearizable consistency) in Cassandra?", "options": ["R + W > N (Read Consistency + Write Consistency > Replication Factor)", "R + W = N", "R * W > N", "R + W < N"], "answer": "R + W > N (Read Consistency + Write Consistency > Replication Factor)"},
+          {"question": "In a cluster with Replication Factor = 3, how many replica nodes must acknowledge a write for `QUORUM`?", "options": ["2 nodes (floor(3/2) + 1)", "1 node", "3 nodes", "4 nodes"], "answer": "2 nodes (floor(3/2) + 1)"},
+          {"question": "Which consistency level requires a majority of replicas strictly within the coordinator's local datacenter?", "options": ["LOCAL_QUORUM", "QUORUM", "EACH_QUORUM", "LOCAL_ONE"], "answer": "LOCAL_QUORUM"},
+          {"question": "What consistency level guarantees maximum write throughput with zero acknowledgment wait time?", "options": ["ANY", "ONE", "LOCAL_ONE", "TWO"], "answer": "ANY"},
+          {"question": "What is the primary risk of using consistency level `ALL` during writes?", "options": ["The write fails completely if even a single replica node is unavailable or down", "Data becomes corrupt", "Writes bypass the CommitLog", "Replicas delete their SSTables"], "answer": "The write fails completely if even a single replica node is unavailable or down"},
+          {"question": "What does consistency level `ONE` return during a read?", "options": ["Data from the fastest responding replica immediately without checking other replicas", "Data verified across all replicas", "Data from the master node only", "Data from local cache only"], "answer": "Data from the fastest responding replica immediately without checking other replicas"},
+          {"question": "According to the CAP theorem, which two attributes does Apache Cassandra prioritize primarily?", "options": ["Availability and Partition Tolerance (AP)", "Consistency and Availability (CA)", "Consistency and Partition Tolerance (CP)", "Atomicity and Persistence (AP)"], "answer": "Availability and Partition Tolerance (AP)"},
+          {"question": "Can Cassandra be configured to operate with CP (Consistency and Partition Tolerance) guarantees?", "options": ["Yes, by querying with strict QUORUM or using Lightweight Transactions (Paxos)", "No, Cassandra can never be consistent", "Only by disabling clustering", "Only on single-node deployments"], "answer": "Yes, by querying with strict QUORUM or using Lightweight Transactions (Paxos)"},
+          {"question": "What feature allows executing atomic compare-and-set operations like `IF NOT EXISTS` in CQL?", "options": ["Lightweight Transactions (LWT) using Paxos", "Two-Phase Commit Locks", "ACID Table Locks", "Distributed Mutex"], "answer": "Lightweight Transactions (LWT) using Paxos"}
+        ]
+      },
+      {
+        "chapter_number": 8,
+        "chapter_title": "Chapter 8: Tombstones, Soft Deletes & Anti-Entropy Repair",
+        "content": "Soft-deletion markers (Tombstones), tombstone exhaustion risks during range queries, gc_grace_seconds window, and nodetool repair routines.",
+        "quiz": [
+          {"question": "What marker does Cassandra write to disk when a cell or row is deleted?", "options": ["Tombstone", "Ghost Record", "Null Pointer", "Drop Flag"], "answer": "Tombstone"},
+          {"question": "Why does Cassandra write a tombstone instead of immediately deleting the data from disk?", "options": ["Because SSTables are immutable and older replica nodes need to know the record was deleted", "Because hard drives forbid file truncating", "To save CPU cycles", "Because CommitLogs are read-only"], "answer": "Because SSTables are immutable and older replica nodes need to know the record was deleted"},
+          {"question": "What parameter defines the time window tombstones must be retained to ensure missing nodes receive the delete?", "options": ["gc_grace_seconds (default 10 days)", "tombstone_ttl", "retention_period", "delete_window_seconds"], "answer": "gc_grace_seconds (default 10 days)"},
+          {"question": "What error or warning occurs when a SELECT query scans across over 100,000 tombstones?", "options": ["TombstoneOverwhelmingException / Query aborted to prevent OOM", "Disk seek failure", "Database crash", "Silent row return"], "answer": "TombstoneOverwhelmingException / Query aborted to prevent OOM"},
+          {"question": "What happens if a failed node stays down longer than `gc_grace_seconds` and rejoins without repair?", "options": ["Zombie data may resurrect because its deleted data still exists while tombstones were purged", "The node cannot start", "The entire keyspace drops", "Data replicates backwards"], "answer": "Zombie data may resurrect because its deleted data still exists while tombstones were purged"},
+          {"question": "What routine synchronization process compares Merkle trees across replicas to repair diverging data?", "options": ["Anti-Entropy Repair via `nodetool repair`", "Compaction sweep", "Read repair check", "Checksum scan"], "answer": "Anti-Entropy Repair via `nodetool repair`"},
+          {"question": "What mathematical cryptographic structure is built by nodetool repair to quickly detect replica differences?", "options": ["Merkle Tree (cryptographic hash tree)", "Binary search tree", "Bloom filter array", "B+ Tree index"], "answer": "Merkle Tree (cryptographic hash tree)"},
+          {"question": "How often should an anti-entropy repair (`nodetool repair`) be run in production?", "options": ["Regularly within the `gc_grace_seconds` window (e.g., weekly)", "Only once when creating the cluster", "Every 5 seconds", "Never, repair is automatic"], "answer": "Regularly within the `gc_grace_seconds` window (e.g., weekly)"},
+          {"question": "What temporary mechanism holds writes destined for an unresponsive replica node for up to 3 hours?", "options": ["Hinted Handoff", "Tombstone Buffer", "Shadow Memtable", "Holding Queue"], "answer": "Hinted Handoff"},
+          {"question": "Can a Hinted Handoff count toward satisfying a consistency level like `QUORUM` or `ONE`?", "options": ["Only for consistency level `ANY`", "Yes, counts as a full replica write", "Only for read queries", "Only in multi-DC clusters"], "answer": "Only for consistency level `ANY`"}
+        ]
+      },
+      {
+        "chapter_number": 9,
+        "chapter_title": "Chapter 9: Secondary Indexes & Materialized Views",
+        "content": "Built-in secondary indexes, scatter-gather query overheads, SASI (SSTable-Attached Secondary Indexes), and Materialized Views.",
+        "quiz": [
+          {"question": "How are native built-in secondary indexes indexed across nodes in Cassandra?", "options": ["Locally per node (indexes data on that physical node only)", "Globally across a dedicated index cluster", "In memory only", "Directly inside the commit log"], "answer": "Locally per node (indexes data on that physical node only)"},
+          {"question": "Why can querying a non-partition key using a native secondary index be inefficient?", "options": ["The coordinator must send scatter-gather requests to every single node in the cluster", "It locks the table", "It writes tombstones", "It forces disk formatting"], "answer": "The coordinator must send scatter-gather requests to every single node in the cluster"},
+          {"question": "When is a native secondary index appropriate in Cassandra?", "options": ["When querying low-cardinality fields restricted to a known partition key", "For high-cardinality unique user emails across the whole cluster", "For sorting millions of rows globally", "For continuous write updates"], "answer": "When querying low-cardinality fields restricted to a known partition key"},
+          {"question": "What feature automatically maintains a secondary table with a different primary key based on source mutations?", "options": ["Materialized Views", "Dynamic Tables", "Shadow Collections", "Auto-Mirrors"], "answer": "Materialized Views"},
+          {"question": "What index type attaches index data directly to the SSTable lifecycle for fast prefix and range queries?", "options": ["SASI (SSTable-Attached Secondary Index)", "B-Tree Master Index", "Global Inverted Table", "Hash Lucene Index"], "answer": "SASI (SSTable-Attached Secondary Index)"},
+          {"question": "What command creates a native secondary index on column `status` of table `orders`?", "options": ["CREATE INDEX ON orders (status);", "MAKE INDEX (status) FOR orders;", "ADD INDEX TO orders.status;", "CREATE GLOBAL INDEX ON orders(status);"], "answer": "CREATE INDEX ON orders (status);"},
+          {"question": "Why are Materialized Views often disabled or used with extreme caution in high-write environments?", "options": ["Asynchronous updates to the view can fail or lag, causing consistency drift", "They delete the base table", "They double CPU clock rates", "They require manual SQL triggers"], "answer": "Asynchronous updates to the view can fail or lag, causing consistency drift"},
+          {"question": "What is the recommended alternative to secondary indexes for high-throughput queries in Cassandra?", "options": ["Explicitly denormalizing into a separate query-specific table", "Relying on ALLOW FILTERING", "Writing all data to flat files", "Restarting nodes"], "answer": "Explicitly denormalizing into a separate query-specific table"},
+          {"question": "Can secondary indexes index clustering columns?", "options": ["Yes, but clustering columns can already be queried natively if preceding columns are provided", "No, prohibited by CQL syntax", "Only in Cassandra 2.0", "Only on strings"], "answer": "Yes, but clustering columns can already be queried natively if preceding columns are provided"},
+          {"question": "What command removes a secondary index from a keyspace?", "options": ["DROP INDEX index_name;", "REMOVE INDEX index_name;", "DELETE INDEX index_name;", "UNSET INDEX index_name;"], "answer": "DROP INDEX index_name;"}
+        ]
+      },
+      {
+        "chapter_number": 10,
+        "chapter_title": "Chapter 10: Cluster Administration & Diagnostic Tooling",
+        "content": "JVM garbage collection tuning, nodetool utilities (status, tpstats, cfstats), backup snapshots, and multi-datacenter operations.",
+        "quiz": [
+          {"question": "What command-line administration tool monitors and manages Cassandra nodes?", "options": ["nodetool", "cass-admin", "cql-ctl", "ringtool"], "answer": "nodetool"},
+          {"question": "Which `nodetool` command displays active thread pool execution metrics and pending/blocked tasks?", "options": ["nodetool tpstats", "nodetool threads", "nodetool status", "nodetool pool"], "answer": "nodetool tpstats"},
+          {"question": "What JVM garbage collector is standard or recommended for low-latency Cassandra clusters?", "options": ["G1GC / ZGC", "Parallel GC", "Serial GC", "CMS (Concurrent Mark Sweep) only"], "answer": "G1GC / ZGC"},
+          {"question": "How do you create an instantaneous zero-copy backup snapshot of a keyspace using hard links?", "options": ["nodetool snapshot <keyspace>", "nodetool backup", "cqlsh DUMP", "tar -cvf cassandra_data"], "answer": "nodetool snapshot <keyspace>"},
+          {"question": "Where are snapshot hard links stored on the filesystem?", "options": ["Inside the `snapshots` directory within each table data directory", "/var/backup/cassandra", "/tmp/snapshots", "Directly inside the commitlog folder"], "answer": "Inside the `snapshots` directory within each table data directory"},
+          {"question": "What command clears existing snapshot files to reclaim disk space after backups?", "options": ["nodetool clearsnapshot", "nodetool deletesnapshot", "rm -rf snapshots", "cqlsh PURGE BACKUPS"], "answer": "nodetool clearsnapshot"},
+          {"question": "What replication strategy distributes data across distinct geographic datacenters and racks?", "options": ["NetworkTopologyStrategy", "SimpleStrategy", "GeoReplicationStrategy", "MultiClusterStrategy"], "answer": "NetworkTopologyStrategy"},
+          {"question": "Why is `SimpleStrategy` strictly forbidden in production multi-datacenter deployments?", "options": ["It is rack-unaware and cannot distribute replicas across distinct physical datacenters", "It deletes replica data", "It caps keyspaces at 1GB", "It requires single-core servers"], "answer": "It is rack-unaware and cannot distribute replicas across distinct physical datacenters"},
+          {"question": "Which command removes a permanently dead server node from the ring metadata?", "options": ["nodetool removenode <HostID>", "nodetool killnode", "cqlsh DROP NODE", "nodetool detach"], "answer": "nodetool removenode <HostID>"},
+          {"question": "What tool restores and reloads SSTables from backup snapshots into an active Cassandra cluster?", "options": ["sstableloader", "sstableimport", "nodetool restore", "cql-loader"], "answer": "sstableloader"}
+        ]
+      }
+    ]
+  },
+  {
+    "title_keyword": "DynamoDB",
+    "course_title": "Amazon DynamoDB Serverless NoSQL Design",
+    "description": "Build highly scalable serverless applications with single-table design patterns.",
+    "duration": "3 Weeks",
+    "chapters": [
+      {
+        "chapter_number": 1,
+        "chapter_title": "Chapter 1: Serverless Architecture & Partition Topologies",
+        "content": "Core serverless foundations of DynamoDB. Understanding managed multi-AZ synchronous replication, Request Routers, storage nodes, internal SSD partition splits based on size (10 GB) and throughput (1000 WCU / 3000 RCU).",
+        "quiz": [
+          {"question": "How many Availability Zones (AZs) does DynamoDB automatically replicate data across synchronously?", "options": ["3 Availability Zones", "1 Zone with nightly snapshots", "2 Zones asynchronously", "5 Geographic Regions"], "answer": "3 Availability Zones"},
+          {"question": "What is the maximum storage limit for a single physical partition in DynamoDB?", "options": ["10 GB", "1 GB", "64 GB", "100 GB"], "answer": "10 GB"},
+          {"question": "What is the maximum Read Capacity Units (RCU) throughput supported by a single partition?", "options": ["3000 RCU", "1000 RCU", "500 RCU", "10000 RCU"], "answer": "3000 RCU"},
+          {"question": "What is the maximum Write Capacity Units (WCU) throughput supported by a single partition?", "options": ["1000 WCU", "3000 WCU", "500 WCU", "5000 WCU"], "answer": "1000 WCU"},
+          {"question": "What architectural component routes incoming HTTP/HTTPS client API requests directly to the correct partition replica?", "options": ["Request Router", "API Gateway", "Elastic Load Balancer", "NAT Instance"], "answer": "Request Router"},
+          {"question": "What consensus protocol coordinates leader election and consistent writes among storage node replicas in a partition?", "options": ["Paxos", "Raft", "Two-Phase Commit", "Gossip"], "answer": "Paxos"},
+          {"question": "What happens when a single partition exceeds 10 GB of data or its throughput thresholds?", "options": ["DynamoDB splits the partition into two new physical partitions automatically", "Incoming writes fail with OutOfDisk errors", "Old records are dropped", "The table enters read-only mode"], "answer": "DynamoDB splits the partition into two new physical partitions automatically"},
+          {"question": "What is the hard maximum size limit for a single item in DynamoDB (including attribute names and values)?", "options": ["400 KB", "1 MB", "16 MB", "64 KB"], "answer": "400 KB"},
+          {"question": "Which protocol do client applications use to communicate with DynamoDB endpoints?", "options": ["HTTPS with AWS Signature Version 4", "TCP Bolt protocol", "gRPC over HTTP/2", "Plain text Telnet"], "answer": "HTTPS with AWS Signature Version 4"},
+          {"question": "What storage tier in DynamoDB offers cost savings up to 60% for infrequently accessed data?", "options": ["DynamoDB Standard-IA (Infrequent Access)", "DynamoDB Glacier Tier", "DynamoDB Deep Cold", "DynamoDB Warm Storage"], "answer": "DynamoDB Standard-IA (Infrequent Access)"}
+        ]
+      },
+      {
+        "chapter_number": 2,
+        "chapter_title": "Chapter 2: Primary Keys — Partition Key vs Sort Key",
+        "content": "Designing primary keys. Analyzing Simple Primary Keys (Partition Key only) versus Composite Primary Keys (Partition Key + Sort Key), hashing mechanics with MD5, and range-based B-Tree ordering within partitions.",
+        "quiz": [
+          {"question": "What is the primary function of the Partition Key (HASH key)?", "options": ["It is hashed to determine the physical partition where the item is stored", "It sorts records alphabetically", "It manages TTL expiration", "It acts as a foreign key"], "answer": "It is hashed to determine the physical partition where the item is stored"},
+          {"question": "What is the primary function of the Sort Key (RANGE key) in a composite primary key?", "options": ["It physically orders items with the same partition key on SSD storage", "It selects the target AWS Region", "It encrypts the payload", "It assigns IP routing weights"], "answer": "It physically orders items with the same partition key on SSD storage"},
+          {"question": "What constitutes an Item Collection in DynamoDB?", "options": ["All items within a table that share the exact same Partition Key value", "A group of multiple tables", "An array attribute inside a document", "A backup snapshot archive"], "answer": "All items within a table that share the exact same Partition Key value"},
+          {"question": "Can two distinct items in the same table have identical Partition Keys if no Sort Key is defined?", "options": ["No, with a Simple Primary Key, each Partition Key must be globally unique", "Yes, duplicates append automatically", "Only if timestamps differ", "Only in on-demand mode"], "answer": "No, with a Simple Primary Key, each Partition Key must be globally unique"},
+          {"question": "Which data types are valid choices for a Partition Key?", "options": ["String, Number, Binary", "Boolean, Null, Object", "Array, Map, Set", "Float, Timestamp, JSON"], "answer": "String, Number, Binary"},
+          {"question": "Which key condition operator checks for Sort Key values beginning with a specified string prefix?", "options": ["begins_with(sort_key, :prefix)", "sort_key LIKE :prefix", "starts(sort_key, :prefix)", "prefix_match(sort_key)"], "answer": "begins_with(sort_key, :prefix)"},
+          {"question": "Which comparison operator checks if a Sort Key falls between two boundary values inclusively?", "options": ["BETWEEN :val1 AND :val2", "IN_RANGE(:val1, :val2)", "FROM :val1 TO :val2", "LIMIT :val1, :val2"], "answer": "BETWEEN :val1 AND :val2"},
+          {"question": "What is the consequence of choosing a low-cardinality Partition Key like `status` ('active' or 'pending')?", "options": ["Severe partition hot-spotting and throttled requests", "Automatic table deletion", "Corrupted B-Tree pointers", "Zero read throughput"], "answer": "Severe partition hot-spotting and throttled requests"},
+          {"question": "What technique distributes high-frequency write traffic across partitions for monotonic keys?", "options": ["Write sharding / key salting (appending random suffixes)", "Disabling Sort Keys", "Turning off secondary indexes", "Using single-character values"], "answer": "Write sharding / key salting (appending random suffixes)"},
+          {"question": "Can a Partition Key value be modified after an item has been written?", "options": ["No, items must be deleted and re-created with the new Partition Key", "Yes, using updateItem() directly", "Only via GSI update", "Only through AWS Support"], "answer": "No, items must be deleted and re-created with the new Partition Key"}
+        ]
+      },
+      {
+        "chapter_number": 3,
+        "chapter_title": "Chapter 3: Single-Table Design Architecture",
+        "content": "Mastering Single-Table Design. Eliminating cross-table joins by consolidating multiple entity types into one physical table using generic PK/SK prefixes, overloaded indexes, and hierarchical data modeling.",
+        "quiz": [
+          {"question": "What is the primary motivation behind Single-Table Design in DynamoDB?", "options": ["Fetching multiple heterogeneous entity types in a single query without joins", "Reducing AWS monthly base table fees to zero", "Avoiding the 400 KB item limit", "Enforcing relational third normal form"], "answer": "Fetching multiple heterogeneous entity types in a single query without joins"},
+          {"question": "What naming convention is standard for primary keys in Single-Table Design?", "options": ["Generic attributes named 'PK' and 'SK'", "Entity-specific names like 'user_id' and 'order_id'", "UUID fields named 'id'", "Auto-incrementing integers"], "answer": "Generic attributes named 'PK' and 'SK'"},
+          {"question": "How are distinct entity types differentiated when stored in the same table?", "options": ["Prefixing keys with entity names (e.g., PK='USER#101', SK='METADATA')", "Using separate table partitions", "Storing each in a dedicated AWS account", "Adding SQL table schema tags"], "answer": "Prefixing keys with entity names (e.g., PK='USER#101', SK='METADATA')"},
+          {"question": "How is a 1-to-many relationship (Customer -> Orders) typically modeled for co-location?", "options": ["PK='CUST#101' with SK='METADATA' for profile and SK='ORDER#2026' for orders", "Storing order IDs in a JSON string", "Creating two physical tables and running batch writes", "Using relational foreign keys"], "answer": "PK='CUST#101' with SK='METADATA' for profile and SK='ORDER#2026' for orders"},
+          {"question": "What is 'Index Overloading' in Single-Table Design?", "options": ["Using generic GSI keys (GSI1PK, GSI1SK) to index multiple relationship patterns", "Creating more than 20 GSIs on a table", "Exceeding the partition throughput limit", "Duplicating keys across regions"], "answer": "Using generic GSI keys (GSI1PK, GSI1SK) to index multiple relationship patterns"},
+          {"question": "What is an adjacency list pattern used for in DynamoDB modeling?", "options": ["Representing many-to-many relationships and graph-like connections", "Compressing text strings", "Tracking partition split history", "Managing user login sessions"], "answer": "Representing many-to-many relationships and graph-like connections"},
+          {"question": "Before writing code or provisioning a Single-Table schema, what must be defined first?", "options": ["A complete access pattern matrix listing every query required by the app", "The AWS cloud billing budget", "The physical hardware rack layout", "The client-side JavaScript bundle"], "answer": "A complete access pattern matrix listing every query required by the app"},
+          {"question": "What is a major trade-off of Single-Table Design compared to multi-table relational designs?", "options": ["Steeper learning curve and reduced ad-hoc query flexibility", "Significantly higher operational hosting costs", "Slow read performance", "Inability to back up data"], "answer": "Steeper learning curve and reduced ad-hoc query flexibility"},
+          {"question": "How can hierarchical category paths be modeled in a Sort Key for range filtering?", "options": ["Delimited path strings like SK='LOCATION#USA#CALIFORNIA#SF'", "Multiple nested arrays", "Foreign key integers", "SQL tree triggers"], "answer": "Delimited path strings like SK='LOCATION#USA#CALIFORNIA#SF'"},
+          {"question": "What DynamoDB tool created by AWS helps visualize and design single-table access patterns?", "options": ["NoSQL Workbench for DynamoDB", "DynamoDB Studio", "AWS Schema Workbench", "CloudWatch Database Designer"], "answer": "NoSQL Workbench for DynamoDB"}
+        ]
+      },
+      {
+        "chapter_number": 4,
+        "chapter_title": "Chapter 4: Secondary Indexes — GSI vs LSI",
+        "content": "Global Secondary Indexes (GSI) vs Local Secondary Indexes (LSI). Analyzing partition key re-mapping, synchronous vs asynchronous updates, sparse indexes, and backpressure throttling.",
+        "quiz": [
+          {"question": "What is a key difference between a Global Secondary Index (GSI) and a Local Secondary Index (LSI)?", "options": ["A GSI can have a completely different Partition Key from the base table", "An LSI has its own dedicated throughput capacity", "A GSI cannot have a Sort Key", "An LSI can be created at any time on an existing table"], "answer": "A GSI can have a completely different Partition Key from the base table"},
+          {"question": "When must a Local Secondary Index (LSI) be created?", "options": ["Only during initial table creation; it cannot be added later", "Any time via the UpdateTable API", "Only when the table exceeds 10 GB", "Only after creating a GSI"], "answer": "Only during initial table creation; it cannot be added later"},
+          {"question": "What maximum size limit applies to an Item Collection on a table with one or more LSIs?", "options": ["10 GB per partition key value", "400 KB total", "No size limit", "100 MB per item"], "answer": "10 GB per partition key value"},
+          {"question": "How are writes to Global Secondary Indexes propagated from the base table?", "options": ["Asynchronously with eventual consistency", "Synchronously with strong consistency", "Via manual nightly batch jobs", "Through external SQS queues"], "answer": "Asynchronously with eventual consistency"},
+          {"question": "What happens if a GSI is throttled due to insufficient provisioned write capacity?", "options": ["Writes to the base table are throttled or fail to avoid GSI replication lag", "The base table drops the GSI writes silently", "The GSI is deleted automatically", "The base table switches to read-only"], "answer": "Writes to the base table are throttled or fail to avoid GSI replication lag"},
+          {"question": "What is a 'Sparse Index' in DynamoDB?", "options": ["An index that only populates items containing the index attributes", "An index with missing partition pointers", "An index stored on spinning disks", "An unindexed collection"], "answer": "An index that only populates items containing the index attributes"},
+          {"question": "Which projection type includes only the primary keys of the base table in the secondary index?", "options": ["KEYS_ONLY", "INCLUDE", "ALL", "MINIMAL"], "answer": "KEYS_ONLY"},
+          {"question": "Which projection type duplicates all base table attributes into the index, eliminating fetch overhead at the cost of storage?", "options": ["ALL", "KEYS_ONLY", "FULL_MIRROR", "INCLUDE"], "answer": "ALL"},
+          {"question": "Can you request strongly consistent reads from a Global Secondary Index (GSI)?", "options": ["No, GSIs support eventually consistent reads only", "Yes, by passing ConsistentRead=True", "Only if provisioned capacity is > 1000", "Only during transactions"], "answer": "No, GSIs support eventually consistent reads only"},
+          {"question": "How many Global Secondary Indexes (GSIs) can be created per table by default?", "options": ["20 GSIs (can be raised via quota request)", "5 GSIs", "Unlimited", "1 GSI"], "answer": "20 GSIs (can be raised via quota request)"}
+        ]
+      },
+      {
+        "chapter_number": 5,
+        "chapter_title": "Chapter 5: Capacity Modes & Cost Optimization",
+        "content": "Capacity management. Deep dive into Provisioned Capacity vs On-Demand Capacity, calculating RCU/WCU metrics, handling burst capacity, adaptive capacity, and auto-scaling policies.",
+        "quiz": [
+          {"question": "How is 1 Read Capacity Unit (RCU) defined for strongly consistent reads?", "options": ["One strongly consistent read per second for an item up to 4 KB", "One read per second for an item up to 400 KB", "Two reads per second of any size", "Four reads per second up to 1 KB"], "answer": "One strongly consistent read per second for an item up to 4 KB"},
+          {"question": "How many eventually consistent reads per second up to 4 KB does 1 RCU provide?", "options": ["2 eventually consistent reads per second", "1 read per second", "4 reads per second", "8 reads per second"], "answer": "2 eventually consistent reads per second"},
+          {"question": "How is 1 Write Capacity Unit (WCU) defined?", "options": ["One write per second for an item up to 1 KB in size", "One write per second up to 4 KB", "Ten writes per second of any size", "One write per minute"], "answer": "One write per second for an item up to 1 KB in size"},
+          {"question": "How many WCUs are consumed when writing a 3.5 KB item?", "options": ["4 WCUs (rounded up to the next 1 KB increment)", "3 WCUs", "1 WCU", "8 WCUs"], "answer": "4 WCUs (rounded up to the next 1 KB increment)"},
+          {"question": "How many RCUs are consumed when performing a strongly consistent read of a 6 KB item?", "options": ["2 RCUs (rounded up to next 4 KB boundary)", "1 RCU", "3 RCUs", "6 RCUs"], "answer": "2 RCUs (rounded up to next 4 KB boundary)"},
+          {"question": "When is On-Demand Capacity mode most cost-effective?", "options": ["For unpredictable workloads with spiky traffic or unknown access volume", "For steady 24/7 uniform background streams", "When running batch jobs only", "For tables with zero read requests"], "answer": "For unpredictable workloads with spiky traffic or unknown access volume"},
+          {"question": "What feature automatically shifts unallocated capacity to hot partitions experiencing temporary bursts?", "options": ["Adaptive Capacity", "Burst Memory Pool", "Partition Swapping", "Load Rebalancing"], "answer": "Adaptive Capacity"},
+          {"question": "For how long can DynamoDB retain unused capacity to absorb temporary throughput bursts?", "options": ["Up to 300 seconds (5 minutes)", "Up to 24 hours", "Up to 60 seconds", "Indefinitely"], "answer": "Up to 300 seconds (5 minutes)"},
+          {"question": "What error code is returned when requests exceed configured capacity and burst limits?", "options": ["ProvisionedThroughputExceededException", "ResourceLimitReachedException", "CapacityExhaustedError", "HTTP 500 Server Error"], "answer": "ProvisionedThroughputExceededException"},
+          {"question": "What SDK mechanism mitigates transient ProvisionedThroughputExceededException errors automatically?", "options": ["Exponential backoff with jitter", "Immediate infinite retry loops", "Dropping failed payloads", "Creating another table"], "answer": "Exponential backoff with jitter"}
+        ]
+      },
+      {
+        "chapter_number": 6,
+        "chapter_title": "Chapter 6: Query vs Scan Operations & Pagination",
+        "content": "Efficient data retrieval. Comparing partition-targeted Query operations against full-table Scans, evaluating KeyConditionExpressions, FilterExpressions, and LastEvaluatedKey pagination.",
+        "quiz": [
+          {"question": "What is the primary operational difference between a Query and a Scan operation?", "options": ["Query searches a specific partition; Scan reads every item in the entire table", "Query is slower than Scan", "Scan uses indexes while Query does not", "Query returns raw bytes while Scan returns JSON"], "answer": "Query searches a specific partition; Scan reads every item in the entire table"},
+          {"question": "What expression is mandatory when executing a Query API operation?", "options": ["KeyConditionExpression specifying an exact Partition Key value", "FilterExpression on non-key attributes", "ProjectionExpression", "SortExpression"], "answer": "KeyConditionExpression specifying an exact Partition Key value"},
+          {"question": "When does DynamoDB evaluate a FilterExpression during a query?", "options": ["After reading items from storage, before returning the final result to the client", "Before fetching items from disk", "Inside the client SDK", "During index compilation"], "answer": "After reading items from storage, before returning the final result to the client"},
+          {"question": "Does applying a FilterExpression reduce the consumed RCU capacity of a Query or Scan?", "options": ["No, RCUs are charged for all items read before the filter is applied", "Yes, you only pay for matching items", "Only in on-demand mode", "Only for eventually consistent reads"], "answer": "No, RCUs are charged for all items read before the filter is applied"},
+          {"question": "What is the maximum data payload returned by a single Query or Scan API call before pagination?", "options": ["1 MB of data", "400 KB of data", "16 MB of data", "Unlimited"], "answer": "1 MB of data"},
+          {"question": "What response attribute indicates that more pages of results remain to be fetched?", "options": ["LastEvaluatedKey", "NextPageToken", "CursorId", "MoreResults=True"], "answer": "LastEvaluatedKey"},
+          {"question": "How do you fetch the next page of results in a paginated Query?", "options": ["Pass the received LastEvaluatedKey as ExclusiveStartKey in the next request", "Pass page_number = page_number + 1", "Increase the Limit parameter", "Use OFFSET 100 in the query"], "answer": "Pass the received LastEvaluatedKey as ExclusiveStartKey in the next request"},
+          {"question": "How can you speed up a full-table Scan on very large datasets?", "options": ["Use Parallel Scan by specifying Segment and TotalSegments parameters", "Increase the client timeout", "Disable Sort Keys", "Switch to HTTP/1.0"], "answer": "Use Parallel Scan by specifying Segment and TotalSegments parameters"},
+          {"question": "How do you reverse the Sort Key traversal order from ascending to descending in a Query?", "options": ["Set ScanIndexForward = False", "Add ORDER BY DESC to expression", "Set ReverseSort = True", "Negate the sort key"], "answer": "Set ScanIndexForward = False"},
+          {"question": "Which parameter limits the maximum number of items evaluated per query invocation?", "options": ["Limit", "PageSize", "MaxItems", "RowCount"], "answer": "Limit"}
+        ]
+      },
+      {
+        "chapter_number": 7,
+        "chapter_title": "Chapter 7: DynamoDB Streams & Event-Driven Patterns",
+        "content": "Change Data Capture (CDC) architectures. Stream shard mechanics, stream view types (KEYS_ONLY, NEW_IMAGE, OLD_IMAGE, NEW_AND_OLD_IMAGES), and integrating with AWS Lambda and Kinesis.",
+        "quiz": [
+          {"question": "What is the primary function of DynamoDB Streams?", "options": ["Capturing an ordered log of item-level modifications (inserts, updates, deletes)", "Streaming video and audio assets", "Providing live client terminal logs", "Backing up tables to S3 nightly"], "answer": "Capturing an ordered log of item-level modifications (inserts, updates, deletes)"},
+          {"question": "How long are modification records retained inside a DynamoDB Stream shard?", "options": ["24 hours", "7 days", "30 days", "Indefinitely"], "answer": "24 hours"},
+          {"question": "Which stream view type includes both the entire item before and after the modification?", "options": ["NEW_AND_OLD_IMAGES", "NEW_IMAGE", "OLD_IMAGE", "KEYS_ONLY"], "answer": "NEW_AND_OLD_IMAGES"},
+          {"question": "Which stream view type includes only the item attributes after the modification occurred?", "options": ["NEW_IMAGE", "OLD_IMAGE", "KEYS_ONLY", "AFTER_STATE"], "answer": "NEW_IMAGE"},
+          {"question": "How does DynamoDB Streams guarantee ordering of item modifications?", "options": ["Changes to the same item are guaranteed to appear in strict chronological order", "Global total ordering across all partitions", "Random unordered batches", "Reverse order only"], "answer": "Changes to the same item are guaranteed to appear in strict chronological order"},
+          {"question": "What compute service natively polls DynamoDB Streams to trigger event-driven microservices?", "options": ["AWS Lambda", "Amazon EC2", "AWS Batch", "Amazon Lightsail"], "answer": "AWS Lambda"},
+          {"question": "What pattern uses DynamoDB Streams to replicate data changes into Elasticsearch or OpenSearch for full-text search?", "options": ["CQRS (Command Query Responsibility Segregation) with CDC", "Event Sourcing without disk", "Distributed Two-Phase Commit", "Static Table Mirroring"], "answer": "CQRS (Command Query Responsibility Segregation) with CDC"},
+          {"question": "What alternative feature streams DynamoDB item changes directly to Amazon Kinesis Data Streams with longer retention?", "options": ["Kinesis Data Streams for DynamoDB", "DynamoDB Firehose Direct", "S3 Stream Router", "CloudWatch Stream Pipe"], "answer": "Kinesis Data Streams for DynamoDB"},
+          {"question": "What parameter in AWS Lambda controls how many stream records are passed per invocation batch?", "options": ["BatchSize", "MaxRecords", "ChunkCount", "StreamWindow"], "answer": "BatchSize"},
+          {"question": "What happens if a Lambda function processing a DynamoDB Stream throws an unhandled error?", "options": ["The stream shard is blocked from progressing until the batch succeeds or expires", "The batch is discarded immediately", "The DynamoDB table is locked", "All previous writes roll back"], "answer": "The stream shard is blocked from progressing until the batch succeeds or expires"}
+        ]
+      },
+      {
+        "chapter_number": 8,
+        "chapter_title": "Chapter 8: ACID Transactions & Conditional Writes",
+        "content": "Multi-item consistency. TransactWriteItems and TransactGetItems two-phase commits, idempotency tokens, optimistic locking via Version attributes, and ConditionExpressions.",
+        "quiz": [
+          {"question": "What API operation executes all-or-nothing multi-item ACID transactional writes across multiple tables?", "options": ["TransactWriteItems", "BatchWriteItem", "AtomicPutItems", "WriteTransaction"], "answer": "TransactWriteItems"},
+          {"question": "What is the maximum number of items that can be included in a single TransactWriteItems call?", "options": ["100 items (or up to 4 MB total)", "25 items", "500 items", "10 items"], "answer": "100 items (or up to 4 MB total)"},
+          {"question": "How many WCUs are consumed by transactional writes compared to standard writes?", "options": ["2x the standard capacity (two-phase commit overhead)", "Same capacity", "4x capacity", "10x capacity"], "answer": "2x the standard capacity (two-phase commit overhead)"},
+          {"question": "What expression ensures a write only succeeds if a specific condition is met (e.g., account balance >= 50)?", "options": ["ConditionExpression", "FilterExpression", "KeyConditionExpression", "ValidationRule"], "answer": "ConditionExpression"},
+          {"question": "What error is returned when a ConditionExpression evaluates to false during an update?", "options": ["ConditionalCheckFailedException", "TransactionCanceledException", "ValidationException", "ResourceConflictException"], "answer": "ConditionalCheckFailedException"},
+          {"question": "How is Optimistic Locking typically implemented in DynamoDB?", "options": ["Using a numeric `version` attribute checked and incremented in a ConditionExpression", "Using pessimistic row-level mutex locks", "Pausing all incoming requests", "Locking the entire table partition"], "answer": "Using a numeric `version` attribute checked and incremented in a ConditionExpression"},
+          {"question": "What parameter prevents duplicate execution if a TransactWriteItems call is retried over the network?", "options": ["ClientRequestToken", "IdempotencyKey", "TransactionNonce", "RequestId"], "answer": "ClientRequestToken"},
+          {"question": "What happens if one single condition check fails within a TransactWriteItems transaction?", "options": ["The entire transaction cancels, all writes are rolled back, and no items change", "Valid items are saved, invalid items are logged", "The table enters safe mode", "Items are saved to S3"], "answer": "The entire transaction cancels, all writes are rolled back, and no items change"},
+          {"question": "What API operation performs transactional, strongly consistent reads across up to 100 items?", "options": ["TransactGetItems", "BatchGetItem", "MultiGetConsistent", "ReadTransaction"], "answer": "TransactGetItems"},
+          {"question": "Can TransactWriteItems operate on items located in different tables within the same AWS Region?", "options": ["Yes, transactions support cross-table operations in the same region and account", "No, items must all reside in the exact same table", "Only if tables have identical primary keys", "Only in on-demand mode"], "answer": "Yes, transactions support cross-table operations in the same region and account"}
+        ]
+      },
+      {
+        "chapter_number": 9,
+        "chapter_title": "Chapter 9: DynamoDB Accelerator (DAX) In-Memory Caching",
+        "content": "In-memory caching architectures. DAX cluster mechanics, microsecond read latencies, write-through caching, Item Cache vs Query Cache, and cache eviction.",
+        "quiz": [
+          {"question": "What is DynamoDB Accelerator (DAX)?", "options": ["A fully managed, highly available in-memory cache for DynamoDB", "A GPU hardware acceleration plugin", "A CLI query optimizer", "An SSD disk defragmenter"], "answer": "A fully managed, highly available in-memory cache for DynamoDB"},
+          {"question": "What latency performance does DAX deliver for cached reads?", "options": ["Microsecond response times", "10-20 milliseconds", "Sub-second only", "500 microseconds minimum"], "answer": "Microsecond response times"},
+          {"question": "How does DAX integrate into application code using official AWS SDKs?", "options": ["DAX is API-compatible; applications point their DynamoDB client to the DAX endpoint", "Developers must rewrite all queries in Redis syntax", "DAX requires raw SQL queries", "It runs solely via browser JavaScript"], "answer": "DAX is API-compatible; applications point their DynamoDB client to the DAX endpoint"},
+          {"question": "What caching strategy does DAX use when writing items?", "options": ["Write-through caching (writes to DAX and DynamoDB simultaneously)", "Write-back / write-behind caching", "Cache-aside only", "Refresh-ahead only"], "answer": "Write-through caching (writes to DAX and DynamoDB simultaneously)"},
+          {"question": "What are the two distinct internal caches maintained by DAX?", "options": ["Item Cache and Query Cache", "Row Cache and Key Cache", "Page Cache and Buffer Cache", "Memory Cache and Disk Cache"], "answer": "Item Cache and Query Cache"},
+          {"question": "What is stored in the DAX Item Cache?", "options": ["Individual items retrieved via GetItem or BatchGetItem", "Result sets of Query and Scan operations", "Table schema metadata", "User login credentials"], "answer": "Individual items retrieved via GetItem or BatchGetItem"},
+          {"question": "What is stored in the DAX Query Cache?", "options": ["The result sets and parameters of Query and Scan operations", "Single primary key items", "Raw BSON documents", "DAX node CPU metrics"], "answer": "The result sets and parameters of Query and Scan operations"},
+          {"question": "What happens when an application requests a strongly consistent read through DAX?", "options": ["DAX passes the request directly to DynamoDB without reading from cache", "DAX reads from cache and validates with a checksum", "DAX throws an exception", "DAX flushes all cache nodes"], "answer": "DAX passes the request directly to DynamoDB without reading from cache"},
+          {"question": "What eviction policy does DAX use when memory becomes full?", "options": ["Least Recently Used (LRU)", "First In First Out (FIFO)", "Random Drop", "Largest Item First"], "answer": "Least Recently Used (LRU)"},
+          {"question": "When is DAX NOT recommended for a workload?", "options": ["For write-heavy applications that rarely perform repeated reads of the same keys", "For read-intensive e-commerce catalogs", "For real-time bidding platforms", "For gaming leaderboards"], "answer": "For write-heavy applications that rarely perform repeated reads of the same keys"}
+        ]
+      },
+      {
+        "chapter_number": 10,
+        "chapter_title": "Chapter 10: Global Tables, Multi-Region Replication & Security",
+        "content": "Enterprise deployments. Active-active multi-region Global Tables, Last-Writer-Wins conflict resolution, KMS encryption at rest, IAM fine-grained authorization, and automated backups.",
+        "quiz": [
+          {"question": "What feature provides fully managed, multi-region active-active database replication?", "options": ["DynamoDB Global Tables", "Cross-Region Read Replicas", "DynamoDB Geo-Cluster", "S3 Multi-Region Access"], "answer": "DynamoDB Global Tables"},
+          {"question": "What conflict resolution strategy do DynamoDB Global Tables use when concurrent writes occur across regions?", "options": ["Last-Writer-Wins (based on timestamp reconciliation)", "Manual operator merge", "First-Writer-Wins", "Two-Phase commit lock"], "answer": "Last-Writer-Wins (based on timestamp reconciliation)"},
+          {"question": "What prerequisite must be enabled on a table before creating a Global Table replica?", "options": ["DynamoDB Streams with NEW_AND_OLD_IMAGES view", "DAX cluster provisioning", "Point-in-Time Recovery disabled", "Provisioned capacity over 10000"], "answer": "DynamoDB Streams with NEW_AND_OLD_IMAGES view"},
+          {"question": "How is encryption at rest handled in DynamoDB by default?", "options": ["Enabled by default using AWS Key Management Service (AWS KMS)", "Disabled unless paid extra", "Requires client-side manual encryption only", "Available only on Enterprise agreements"], "answer": "Enabled by default using AWS Key Management Service (AWS KMS)"},
+          {"question": "What security mechanism restricts user access to specific attributes or rows matching their Cognito Identity ID?", "options": ["IAM Fine-Grained Access Control (FGAC) with condition keys", "Security Groups on port 80", "VPC routing tables", "Linux file permissions"], "answer": "IAM Fine-Grained Access Control (FGAC) with condition keys"},
+          {"question": "What feature enables automated continuous backups with continuous recovery to any second in the past 35 days?", "options": ["Point-in-Time Recovery (PITR)", "On-Demand Snapshots", "AWS Backup vault export", "Continuous S3 Dump"], "answer": "Point-in-Time Recovery (PITR)"},
+          {"question": "What native feature automatically purges expired items from storage based on a Unix timestamp attribute without consuming WCU?", "options": ["Time to Live (TTL)", "Auto-Drop", "Expiring Partitions", "Lifecycle Rule"], "answer": "Time to Live (TTL)"},
+          {"question": "How quickly does DynamoDB delete items after their TTL timestamp expires?", "options": ["Typically within 48 hours in the background without affecting table throughput", "Instantly at the exact second", "Only upon table restart", "After 30 days"], "answer": "Typically within 48 hours in the background without affecting table throughput"},
+          {"question": "What network interface allows Amazon VPC resources to connect privately to DynamoDB without crossing the public internet?", "options": ["VPC Gateway Endpoint for DynamoDB", "NAT Gateway", "Internet Gateway", "Transit Gateway Peering"], "answer": "VPC Gateway Endpoint for DynamoDB"},
+          {"question": "Are TTL background deletions emitted into DynamoDB Streams?", "options": ["Yes, marked with `principalId: dynamo.amazonaws.com` in the record", "No, TTL deletions bypass streams entirely", "Only if configured with DAX", "Only in on-demand mode"], "answer": "Yes, marked with `principalId: dynamo.amazonaws.com` in the record"}
+        ]
+      }
+    ]
+  }
+]
+
